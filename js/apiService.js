@@ -227,17 +227,17 @@ window.apiService = {
 
     container.innerHTML = `
       <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:14px; padding:16px; margin-bottom:18px; box-shadow:0 4px 12px rgba(0,0,0,0.04);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:8px;">
           <div>
             <div style="display:flex; align-items:center; gap:6px;">
               <span style="font-size:16px;">🔗</span>
-              <span style="font-size:14px; font-weight:900; color:#0f172a;">천안시 4대 공공데이터 API 실시간 파이프라인</span>
+              <span style="font-size:13.5px; font-weight:900; color:#0f172a; line-height:1.3;">천안시 4대 공공데이터 API 실시간 파이프라인</span>
             </div>
-            <div style="font-size:11px; color:#64748b; margin-top:2px;">
-              실시간 데이터 공급 연동률 <strong style="color:#16a34a;">100% 정상 (4/4 CONNECTED)</strong>
+            <div style="font-size:11px; color:#16a34a; font-weight:800; margin-top:3px;">
+              ● 데이터 공급 연동률 100% 정상 (4/4 CONNECTED)
             </div>
           </div>
-          <button id="refresh-all-apis-btn" style="background:#eff6ff; border:1px solid #bfdbfe; color:#2563eb; font-size:11px; font-weight:800; padding:5px 10px; border-radius:6px; cursor:pointer;">
+          <button id="refresh-all-apis-btn" style="white-space:nowrap; background:#eff6ff; border:1px solid #bfdbfe; color:#2563eb; font-size:11px; font-weight:800; padding:6px 10px; border-radius:8px; cursor:pointer;">
             🔄 즉시 재호출
           </button>
         </div>
@@ -262,27 +262,29 @@ window.apiService = {
                 제공: <strong>${api.provider}</strong> · 수신: ${api.lastSync}
               </div>
 
-              <!-- 수신 데이터 요약 칩 -->
-              <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:8px 10px; font-size:11px; font-family:monospace; color:#334155;">
+              <!-- 수신 데이터 요약 카드 (가독성 높은 2열 Key-Value 디자인) -->
+              <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
                 ${this.formatApiDataSummary(api)}
               </div>
 
               ${api.rawJson ? `
-                <div style="margin-top:6px; text-align:right;">
-                  <button class="view-raw-json-btn" data-api-id="${api.id}" style="background:none; border:none; color:#4f46e5; font-size:10.5px; font-weight:800; cursor:pointer; text-decoration:underline;">
-                    📄 실제 공공데이터 수신 JSON 원문 보기
+                <div style="margin-top:8px; text-align:right;">
+                  <button class="view-raw-json-btn" data-api-id="${api.id}" style="background:#eef2ff; border:1px solid #c7d2fe; color:#4338ca; font-size:10.5px; font-weight:800; padding:4px 8px; border-radius:6px; cursor:pointer;">
+                    📄 실제 공공데이터 수신 JSON 원문 열람
                   </button>
                 </div>
-                <pre id="raw-json-box-${api.id}" style="display:none; margin-top:6px; background:#0f172a; color:#38bdf8; font-size:10px; padding:10px; border-radius:8px; overflow-x:auto; max-height:160px;"></pre>
+                <pre id="raw-json-box-${api.id}" style="display:none; margin-top:8px; background:#0f172a; color:#38bdf8; font-family:'SF Mono', Menlo, Consolas, monospace; font-size:10px; line-height:1.45; padding:10px; border-radius:8px; overflow-x:auto; max-height:180px;"></pre>
               ` : ""}
             </div>
           `).join("")}
         </div>
 
-        <!-- 공공데이터포털 인증키 설정 모달 토글 -->
-        <div style="margin-top:12px; padding-top:10px; border-top:1px dashed #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:11px;">
-          <span style="color:#64748b;">공공데이터포털 인증키: <strong style="color:#16a34a; font-family:monospace;">${this.serviceKey.slice(0, 8)}...${this.serviceKey.slice(-6)} (인증 성공)</strong></span>
-          <button id="config-api-key-btn" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:4px; cursor:pointer;">
+        <!-- 공공데이터포털 인증키 설정 영역 -->
+        <div style="margin-top:12px; padding-top:12px; border-top:1px dashed #e2e8f0; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+          <div style="font-size:11px; color:#475569; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            공공데이터 인증키: <strong style="color:#16a34a; font-family:monospace; font-size:10.5px;">${this.serviceKey.slice(0, 8)}...${this.serviceKey.slice(-6)} (인증 성공)</strong>
+          </div>
+          <button id="config-api-key-btn" style="white-space:nowrap; flex-shrink:0; background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; font-size:10.5px; font-weight:800; padding:4px 10px; border-radius:6px; cursor:pointer;">
             🔑 인증키 관리
           </button>
         </div>
@@ -323,16 +325,60 @@ window.apiService = {
 
   formatApiDataSummary(api) {
     if (api.id === "weather") {
-      return `🌡️ 천안 백석동: 기온 ${api.data.temp}°C (${api.data.weather}) | 미세먼지 PM10: ${api.data.pm10}㎍/㎥ (${api.data.airGrade})`;
+      return `
+        <div style="display:flex; flex-direction:column; gap:5px; font-family:var(--font-main);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#0284c7; font-weight:800; font-size:11px;">🌡️ 천안 백석동 실측기온</span>
+            <span style="font-weight:900; color:#0f172a; font-size:12px;">${api.data.temp}°C (${api.data.weather})</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#059669; font-weight:800; font-size:11px;">💨 실시간 대기질 (PM10)</span>
+            <span style="font-weight:900; color:#059669; font-size:12px;">${api.data.pm10}㎍/㎥ · ${api.data.airGrade}</span>
+          </div>
+        </div>
+      `;
     }
     if (api.id === "utic") {
-      return `🚦 8대 관측 교차로: 통과량 ${api.data.totalVolume} | 평균속도 ${api.data.avgSpeed} | 상태 [${api.data.level}]`;
+      return `
+        <div style="display:flex; flex-direction:column; gap:5px; font-family:var(--font-main);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#d97706; font-weight:800; font-size:11px;">🚦 8대 교차로 일일통과량</span>
+            <span style="font-weight:900; color:#0f172a; font-size:12px;">${api.data.totalVolume}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#475569; font-weight:800; font-size:11px;">⚡ 실시간 평균 통행속도</span>
+            <span style="font-weight:900; color:#0f172a; font-size:12px;">${api.data.avgSpeed} (${api.data.level})</span>
+          </div>
+        </div>
+      `;
     }
     if (api.id === "parking") {
-      return `🅿️ 종합운동장: ${api.data.stadiumOccupied} 점유 (${api.data.stadiumRemain} 잔여) | 삼거리공원: ${api.data.samgeoriOccupied} 점유 (${api.data.samgeoriRemain} 여유)`;
+      return `
+        <div style="display:flex; flex-direction:column; gap:5px; font-family:var(--font-main);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#dc2626; font-weight:800; font-size:11px;">🏟️ 종합운동장 잔여면</span>
+            <span style="font-weight:900; color:#dc2626; font-size:12px;">${api.data.stadiumRemain} (${api.data.stadiumOccupied} 점유)</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#059669; font-weight:800; font-size:11px;">🌳 삼거리공원 잔여면</span>
+            <span style="font-weight:900; color:#059669; font-size:12px;">${api.data.samgeoriRemain} (${api.data.samgeoriOccupied} 여유)</span>
+          </div>
+        </div>
+      `;
     }
     if (api.id === "bis") {
-      return `🚌 셔틀버스 1~8호차: ${api.data.operatingVehicles}대 전수 가동 중 (평균 배차간격 ${api.data.avgInterval})`;
+      return `
+        <div style="display:flex; flex-direction:column; gap:5px; font-family:var(--font-main);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#4f46e5; font-weight:800; font-size:11px;">🚌 축제 순환 셔틀 가동</span>
+            <span style="font-weight:900; color:#4f46e5; font-size:12px;">${api.data.operatingVehicles}대 전수 정상 운행</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:#475569; font-weight:800; font-size:11px;">⏱️ 순환 배차 간격</span>
+            <span style="font-weight:900; color:#0f172a; font-size:12px;">평균 ${api.data.avgInterval}</span>
+          </div>
+        </div>
+      `;
     }
     return JSON.stringify(api.data);
   }

@@ -15,9 +15,9 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
   <!-- App Stylesheets -->
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/map.css" />
+  <link rel="stylesheet" href="css/style.css?v=2.2" />
+  <link rel="stylesheet" href="css/components.css?v=2.2" />
+  <link rel="stylesheet" href="css/map.css?v=2.2" />
 </head>
 <body>
 
@@ -568,12 +568,24 @@
               </div>
             </div>
 
-            <!-- 4단계 의사결정 프로세스 뱃지 바 -->
-            <div style="display:flex; justify-content:space-between; background:#f1f5f9; border:1px solid #e2e8f0; border-radius:12px; padding:10px 14px; margin-bottom:16px; font-size:11.5px; font-weight:800;">
-              <span style="color:#d97706;">01 관측 ❯</span>
-              <span style="color:#0284c7;">02 비교 ❯</span>
-              <span style="color:#4f46e5;">03 검토 ❯</span>
-              <span style="color:#059669;">04 현장 실행</span>
+            <!-- 4단계 의사결정 프로세스 스텝 인디케이터 -->
+            <div class="op-process-stepper">
+              <div class="op-step-item step-1">
+                <span class="step-num">STEP 01</span>
+                <span class="step-name">현장 관측</span>
+              </div>
+              <div class="op-step-item step-2">
+                <span class="step-num">STEP 02</span>
+                <span class="step-name">권역 비교</span>
+              </div>
+              <div class="op-step-item step-3">
+                <span class="step-num">STEP 03</span>
+                <span class="step-name">정책 검토</span>
+              </div>
+              <div class="op-step-item step-4">
+                <span class="step-num">STEP 04</span>
+                <span class="step-name">현장 실행</span>
+              </div>
             </div>
 
             <!-- [실시간 공공 API 연동 모니터] 4대 공공데이터 API 실시간 파이프라인 마운트 지점 -->

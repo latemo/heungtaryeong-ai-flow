@@ -51,34 +51,36 @@ class OperatorController {
 
       return `
         <div class="operator-scenario-card ${sc.level}">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <span class="card-badge ${sc.level === 'warning' ? 'live' : sc.level === 'commerce' ? 'warning' : 'ai'}">
-              ${sc.level === 'warning' ? '🚨 접근 부하 경고' : sc.level === 'commerce' ? '🎁 상권 분산 활성화' : 'ℹ️ 여유 자원 활용'}
+              ${sc.level === 'warning' ? '🚨 서북권 부하 경고' : sc.level === 'commerce' ? '🎁 원도심 상권 활성화' : 'ℹ️ 동남권 여유 활용'}
             </span>
-            <span style="font-size:11px; color:var(--text-muted); font-family:monospace;">
-              관측: ${sc.detectedTime}
+            <span style="font-size:11.5px; color:#64748b; font-weight:700;">
+              관측시각: ${sc.detectedTime}
             </span>
           </div>
 
-          <h4 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:900; color:#0f172a; line-height:1.4; margin-bottom:8px;">
             ${sc.title}
           </h4>
 
           <div class="scenario-evidence">
-            <div>📊 <strong>감지 근거:</strong> ${sc.evidence}</div>
-            <div style="margin-top:2px;">🔍 <strong>발생 사유:</strong> ${sc.reason}</div>
+            <div style="margin-bottom:3px;">📊 <strong>감지 근거:</strong> ${sc.evidence}</div>
+            <div>🔍 <strong>발생 사유:</strong> ${sc.reason}</div>
           </div>
 
           <div class="scenario-action-box">
-            <div style="font-weight:700; color:#ba8fff; margin-bottom:4px;">💡 AI 추천 현장 조치안:</div>
-            <div>${sc.recommendedAction}</div>
-            <div style="font-size:11px; color:#9aa0b8; margin-top:6px;">
-              연동 채널: ${sc.channelTargets.join(" · ")}
+            <div style="font-weight:900; color:#4338ca; font-size:12px; margin-bottom:4px;">💡 AI 추천 현장 조치안:</div>
+            <div style="font-weight:700; color:#1e1b4b; font-size:13px; line-height:1.45;">${sc.recommendedAction}</div>
+            <div style="display:flex; align-items:center; gap:5px; margin-top:8px; font-size:11px; color:#6366f1; font-weight:700;">
+              <span>연동 채널:</span>
+              <span style="background:#e0e7ff; color:#3730a3; padding:2px 6px; border-radius:4px;">${sc.channelTargets.join("</span> <span style='background:#e0e7ff; color:#3730a3; padding:2px 6px; border-radius:4px;'>")}</span>
             </div>
           </div>
 
-          <div style="font-size:11.5px; color:#00e676; font-weight:600; margin-bottom:10px;">
-            📈 예상 효과: ${sc.impactProjection}
+          <div style="display:flex; align-items:center; gap:5px; font-size:12px; color:#059669; font-weight:800; margin-bottom:12px; background:#ecfdf5; border:1px solid #a7f3d0; padding:6px 10px; border-radius:8px;">
+            <span>📈 예상 정책 효과:</span>
+            <span>${sc.impactProjection}</span>
           </div>
 
           ${!isApproved ? `

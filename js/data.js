@@ -373,8 +373,10 @@ const FESTIVAL_DATA = {
       detectedTime: "14:25:10",
       title: "서북권 종합운동장 진입로 (번영로) 용량 88% 초과 임계점 도달",
       evidence: "ITS 검지기 2,410대/h 유입 중, 진입 대기시간 35분 급증 감지",
-      action: "남부대로 우회 권고 및 삼거리공원 무료 임시주차장 분산 메시지 발송",
-      expectedEffect: "서북권 부하 -14pt, 동남권 유입 +18% 전환"
+      reason: "종합운동장 메인무대 K-POP 월드댄스 콘테스트 입장 인파 집중",
+      recommendedAction: "남부대로 우회 권고 및 삼거리공원 무료 임시주차장(1,800면) 유도 메시지 발송",
+      channelTargets: ["천안시 교통전광판(VMS)", "카카오 T / 티맵 내비", "시민 안전 안내문자"],
+      impactProjection: "서북권 부하 -14pt, 동남권 유입 +18% 전환"
     },
     {
       id: "OP-ALERT-02",
@@ -382,8 +384,10 @@ const FESTIVAL_DATA = {
       detectedTime: "14:18:40",
       title: "원도심 명동거리 & 남산중앙시장 유동인구 회복 유도",
       evidence: "메인무대 집중률 72% 대비 원도심 방문객 -35% 편중 발생",
-      action: "천안사랑카드 10% 추가 캐시백 및 지정 셔틀 정류장 알림 푸시",
-      expectedEffect: "원도심 상권 매출 +22% 견인, 대기시간 분산"
+      reason: "방문객들이 행사장 내부에만 머물며 지역 상권 유입 단절 현상",
+      recommendedAction: "천안사랑카드 10% 추가 캐시백 및 셔틀 4/5번(원도심/전통시장) 승차 알림 푸시",
+      channelTargets: ["축제 공식 앱 푸시", "천안사랑카드 앱 공지", "축제장 리플릿 배포처"],
+      impactProjection: "원도심 상권 매출 +22% 견인, 대기시간 분산"
     },
     {
       id: "OP-ALERT-03",
@@ -391,8 +395,10 @@ const FESTIVAL_DATA = {
       detectedTime: "13:50:00",
       title: "삼거리공원 제2임시주차장 1,000면 여유 공간 확보 완료",
       evidence: "셔틀 순환 주기 10분 정상 유지, 정체 없이 진입 가능",
-      action: "네이버/카카오 길안내 거점을 삼거리공원으로 변경 유도",
-      expectedEffect: "초기 분산 유입률 28% 상승"
+      reason: "동남권 제2임시주차장 조기 개방 및 주차 유도요원 12명 배치 완료",
+      recommendedAction: "네이버/카카오 길안내 도착 거점을 삼거리공원으로 변경 유도",
+      channelTargets: ["네이버 지도 공지", "카카오맵 추천", "현장 안내 표지판"],
+      impactProjection: "초기 분산 유입률 28% 상승"
     }
   ]
 };
