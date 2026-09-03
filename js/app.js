@@ -18,6 +18,7 @@ function initApp() {
   bindTimeWarpChips();
 
   // 하위 모듈 초기화
+  if (window.apiService) window.apiService.init();
   if (window.flowMap) window.flowMap.init();
   if (window.routesController) window.routesController.init();
   if (window.operatorController) window.operatorController.init();
@@ -26,7 +27,7 @@ function initApp() {
 
   // 초기 브리핑 토스트
   setTimeout(() => {
-    showToast("⚡ 현재 시각 기준 실시간 AI 교통·주차 분석 가동 중");
+    showToast("⚡ 천안시 4대 공공데이터 API 실시간 파이프라인 연동 가동");
   }, 600);
 }
 
@@ -195,6 +196,10 @@ function switchTab(tabId) {
 
   if (tabId === "tab-map" && window.flowMap) {
     window.flowMap.invalidateSize();
+  }
+
+  if (tabId === "tab-operator" && window.apiService) {
+    window.apiService.renderPipelineDashboard();
   }
 }
 

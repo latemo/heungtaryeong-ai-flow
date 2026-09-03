@@ -123,16 +123,21 @@
                 천안시 교차로 17.4만 건 데이터 기반 30·60분 예측으로 덜 붐비는 시간과 대안 동선을 제시합니다.
               </p>
               <div class="weather-pills-row">
+                <div class="weather-pill" style="background:rgba(16,185,129,0.25); border-color:rgba(52,211,153,0.5);">
+                  <span style="width:6px; height:6px; background:#34d399; border-radius:50%; display:inline-block; animation:pulse 1.5s infinite;"></span>
+                  <span style="font-size:10px; font-weight:900; color:#a7f3d0;">기상청·에어코리아 LIVE</span>
+                </div>
                 <div class="weather-pill">
                   <span>🌡️</span>
-                  <span id="weather-temp">25.4°C</span>
+                  <span id="live-weather-temp">23.4°C</span>
                 </div>
-                <div class="weather-pill" id="weather-condition">
-                  ☀️ 맑음
+                <div class="weather-pill">
+                  <span>☀️</span>
+                  <span id="live-weather-status">맑음</span>
                 </div>
                 <div class="weather-pill">
                   <span>💨</span>
-                  <span>대기질 좋음</span>
+                  <span id="live-weather-air">대기질 좋음</span>
                 </div>
                 <div class="weather-pill" style="background:rgba(59,48,232,0.4); border-color:rgba(129,140,248,0.5);">
                   <span>🎯</span>
@@ -571,6 +576,9 @@
               <span style="color:#059669;">04 현장 실행</span>
             </div>
 
+            <!-- [실시간 공공 API 연동 모니터] 4대 공공데이터 API 실시간 파이프라인 마운트 지점 -->
+            <div id="public-api-pipeline-container"></div>
+
             <!-- 핵심 모니터링 메트릭 카드 -->
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
               <div class="glass-card" style="padding:14px; margin-bottom:0;">
@@ -687,6 +695,7 @@
 
   <!-- Application Logic Modules -->
   <script src="js/data.js"></script>
+  <script src="js/apiService.js"></script>
   <script src="js/map.js"></script>
   <script src="js/routes.js"></script>
   <script src="js/operator.js"></script>
