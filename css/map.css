@@ -1,0 +1,253 @@
+/* 
+ * 천안 J3D LAB - 흥타령 AI FLOW
+ * 밝고 선명한 지도 시각화 스타일시트 (자연스러운 오픈스트리트맵 타일 + 모던 핀 마커)
+ */
+
+.map-screen-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+/* 상단 맵 제어 패널 */
+.map-header-panel {
+  margin-bottom: 10px;
+}
+
+.map-wrapper {
+  width: 100%;
+  height: 380px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+  background: #f8fafc;
+}
+
+#leaflet-map {
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+/* 밝고 자연스러운 타일 (어두운 반전 필터 제거) */
+.leaflet-tile {
+  filter: saturate(1.1) contrast(1.02);
+}
+
+/* 맵 위 오버레이 컨트롤 */
+.map-overlay-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.map-tool-btn {
+  width: 34px;
+  height: 34px;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  transition: all 0.15s ease;
+}
+
+.map-tool-btn:hover {
+  background: #f8fafc;
+  color: var(--primary);
+}
+
+/* 맵 범례 (Legend - 깔끔한 화이트 칩) */
+.map-legend {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  color: #475569;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.legend-dot.green { background: #10b981; }
+.legend-dot.yellow { background: #f59e0b; }
+.legend-dot.red { background: #ef4444; }
+
+/* 커스텀 마커 - 행사장 거점 (또렷한 플랫 핀) */
+.venue-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.venue-marker-pin {
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 2px solid #ffffff;
+}
+
+.venue-marker-pin.stadium {
+  background: #dc2626;
+}
+
+.venue-marker-pin.samgeori {
+  background: #059669;
+}
+
+/* 커스텀 마커 - 교차로 접근 부하 */
+.load-node-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.node-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  font-weight: 900;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+
+.node-circle.smooth {
+  background: #10b981;
+}
+.node-circle.slow {
+  background: #f59e0b;
+}
+.node-circle.heavy {
+  background: #ef4444;
+}
+
+/* 눈이 피로하지 않은 정돈된 펄스 */
+.node-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.node-circle.heavy ~ .node-pulse {
+  background: rgba(239, 68, 68, 0.25);
+  transform: scale(1.4);
+}
+
+.node-circle.slow ~ .node-pulse {
+  background: rgba(245, 158, 11, 0.2);
+  transform: scale(1.3);
+}
+
+.node-circle.smooth ~ .node-pulse {
+  background: rgba(16, 185, 129, 0.15);
+  transform: scale(1.2);
+}
+
+/* 셔틀 버스 마커 (산뜻한 옐로우) */
+.shuttle-marker {
+  background: #f59e0b;
+  color: #ffffff;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4);
+}
+
+/* Leaflet 팝업 커스텀 (깔끔한 화이트 카드) */
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12) !important;
+  padding: 4px;
+}
+
+.leaflet-popup-tip {
+  background: #ffffff !important;
+}
+
+.popup-inner-card {
+  padding: 4px 6px;
+}
+
+.popup-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-metric {
+  font-size: 11px;
+  color: #475569;
+  margin: 3px 0;
+}
+
+.popup-recommend {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  color: #3730a3;
+  margin-top: 6px;
+  font-weight: 600;
+}

@@ -1,0 +1,424 @@
+/* 
+ * 천안 J3D LAB - 흥타령 AI FLOW
+ * 밝고 가독성 높은 미니멀 & 클린 디자인 시스템
+ */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+:root {
+  /* 세련되고 밝은 톤의 시빅 테크 컬러 팔레트 */
+  --primary: #4f46e5;
+  --primary-light: #6366f1;
+  --primary-subtle: #eef2ff;
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  
+  --coral-orange: #f97316;
+  --coral-subtle: #fff7ed;
+  --accent-green: #10b981;
+  --accent-green-subtle: #ecfdf5;
+  --accent-red: #ef4444;
+  --accent-red-subtle: #fef2f2;
+  --accent-amber: #f59e0b;
+  --accent-amber-subtle: #fffbeb;
+  --accent-blue: #0ea5e9;
+  --accent-blue-subtle: #f0f9ff;
+  
+  /* 기본 라이트 테마 (화사하고 정갈한 톤) */
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-muted: #f1f5f9;
+  --border-subtle: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --border-active: #c7d2fe;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.08);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  --bottom-bar-height: 68px;
+  --header-height: 60px;
+  
+  --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 리셋 & 기본 설정 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family);
+  background: #edf2f7;
+  color: var(--text-primary);
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 데스크탑 뷰포트 센터링 (은은하고 편안한 밝은 그레이 배경) */
+.desktop-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%);
+  position: relative;
+}
+
+/* 상단 데스크탑 제어 바 */
+.desktop-controls {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
+}
+
+.control-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+  background: #ffffff;
+  color: var(--primary);
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 스마트폰 프레임 (깔끔한 화이트/슬레이트 섀도우 쉘) */
+.mobile-device-shell {
+  width: 412px;
+  height: 870px;
+  max-height: 94vh;
+  background: var(--bg-app);
+  border-radius: 40px;
+  position: relative;
+  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.18),
+              0 0 0 8px #ffffff,
+              0 0 0 10px #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 풀스크린 모드일 때 */
+.desktop-wrapper.fullscreen .mobile-device-shell {
+  width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 모바일 디바이스 펀치홀 카메라 */
+.device-notch {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: #0f172a;
+  border-radius: 50%;
+  z-index: 1010;
+  pointer-events: none;
+}
+
+.notch-camera {
+  display: none;
+}
+
+/* 앱 뷰포트 컨테이너 */
+.app-viewport {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: var(--bg-app);
+  overflow: hidden;
+}
+
+/* 상단 앱 헤더 (깨끗한 화이트 & 최적 여백) */
+.app-header {
+  height: 62px;
+  padding: 16px 18px 8px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 500;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-badge {
+  background: var(--primary-gradient);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-title span.ai-tag {
+  background: var(--primary-subtle);
+  color: var(--primary);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.header-icon-btn:hover {
+  background: #f1f5f9;
+  color: var(--text-primary);
+}
+
+.header-icon-btn .badge-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-red);
+  border-radius: 50%;
+}
+
+/* 긴급 분산 안내 라이브 티커 (부드러운 오렌지/앰버 틴트) */
+.live-broadcast-ticker {
+  background: #fff7ed;
+  border-bottom: 1px solid #fed7aa;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #9a3412;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.live-broadcast-ticker:hover {
+  background: #ffedd5;
+}
+
+.ticker-icon {
+  font-size: 13px;
+  color: #ea580c;
+}
+
+.ticker-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.ticker-action {
+  font-size: 11px;
+  color: #ea580c;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* 메인 컨텐츠 영역 */
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  padding-bottom: calc(var(--bottom-bar-height) + 16px);
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-content::-webkit-scrollbar {
+  width: 4px;
+}
+.app-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* 탭 화면 전환 */
+.tab-screen {
+  display: none;
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+.tab-screen.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 하단 네비게이션 바 (깔끔한 화이트 미니멀 탭바) */
+.bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--bottom-bar-height);
+  background: #ffffff;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 4px 6px 4px;
+  z-index: 600;
+  box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.04);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: #64748b;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  flex: 1;
+}
+
+.nav-item .nav-icon {
+  font-size: 18px;
+  transition: transform 0.15s ease;
+}
+
+.nav-item .nav-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.nav-item.active {
+  color: var(--primary);
+}
+
+.nav-item.active .nav-icon {
+  transform: scale(1.1);
+  color: var(--primary);
+}
+
+.nav-item.active .nav-label {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+/* 반응형: 모바일 직접 접속 시 */
+@media (max-width: 480px) {
+  .desktop-wrapper {
+    background: var(--bg-app);
+  }
+  .desktop-controls, .device-notch {
+    display: none;
+  }
+  .mobile-device-shell {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
