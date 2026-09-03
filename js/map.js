@@ -257,7 +257,8 @@ class FlowMapController {
 
   // 3. 교차로 부하 마커 렌더링
   renderIntersections() {
-    const { intersections } = window.FESTIVAL_DATA;
+    if (!this.map) return;
+    const intersections = this.liveIntersections || window.FESTIVAL_DATA.calculateRealtimeTraffic(new Date()).intersections;
     this.markers.intersections.forEach(m => this.map.removeLayer(m));
     this.markers.intersections = [];
 
@@ -312,6 +313,7 @@ class FlowMapController {
 
   // 4. 기획서 기반 축제 시설물 마커 렌더링 (화장실, 부스, 주차장)
   renderFacilityMarkers() {
+    if (!this.map) return;
     const { toilets, booths, parkings } = window.FESTIVAL_DATA;
 
     // 기존 시설물 마커 초기화
@@ -454,6 +456,14 @@ class FlowMapController {
     }, 3500);
   }
 
+  updateDynamicIntersections(liveAnalysis) {
+    if (!liveAnalysis) return;
+    this.liveIntersections = liveAnalysis.intersections;
+    this.liveAnalysis = liveAnalysis;
+    this.renderIntersections();
+    this.updateLoadSummaryCards(this.currentMode);
+  }
+
   setTimeMode(mode) {
     this.currentMode = mode;
     this.renderIntersections();
@@ -461,9 +471,13 @@ class FlowMapController {
   }
 
   updateLoadSummaryCards(mode) {
-    const { venues } = window.FESTIVAL_DATA;
-    const stadiumVal = mode === "now" ? venues.stadium.currentLoad : mode === "pred30" ? venues.stadium.predictedLoad30 : venues.stadium.predictedLoad60;
-    const samgeoriVal = mode === "now" ? venues.samgeori.currentLoad : mode === "pred30" ? venues.samgeori.predictedLoad30 : venues.samgeori.predictedLoad60;
+    if (!this.liveAnalysis) {
+      this.liveAnalysis = window.FESTIVAL_DATA.calculateRealtimeTraffic(new Date());
+    }
+    const st = this.liveAnalysis.stadium;
+    const sg = this.liveAnalysis.samgeori;
+    const stadiumVal = mode === "now" ? st.currentLoad : mode === "pred30" ? st.pred30 : st.pred60;
+    const samgeoriVal = mode === "now" ? sg.currentLoad : mode === "pred30" ? sg.pred30 : sg.pred60;
 
     const mapStadiumEl = document.getElementById("map-stadium-load");
     const mapSamgeoriEl = document.getElementById("map-samgeori-load");

@@ -63,18 +63,35 @@ class ProgramSearchController {
       return;
     }
 
+    const now = new Date();
+    const curTimeVal = now.getHours() * 60 + now.getMinutes();
+
     container.innerHTML = filtered.map(p => {
       const isFav = this.favorites.has(p.id);
       const isStadium = p.venue.includes("종합운동장");
+
+      // 시작/종료 분 환산
+      const startVal = p.startHour * 60 + p.startMin;
+      const endVal = p.endHour * 60 + p.endMin;
+
+      let statusBadge = `<span style="font-size:10.5px; color:#64748b; font-weight:700;">${String(p.startHour).padStart(2,'0')}:${String(p.startMin).padStart(2,'0')} ~ ${String(p.endHour).padStart(2,'0')}:${String(p.endMin).padStart(2,'0')}</span>`;
+      
+      if (curTimeVal >= startVal && curTimeVal <= endVal) {
+        statusBadge = `<span class="card-badge live" style="font-size:10.5px; animation:pulse-user 1.5s infinite;">🔴 NOW LIVE 진행 중</span>`;
+      } else if (curTimeVal < startVal && startVal - curTimeVal <= 60) {
+        statusBadge = `<span class="card-badge warning" style="font-size:10.5px;">⏳ ${startVal - curTimeVal}분 뒤 시작</span>`;
+      } else if (curTimeVal > endVal) {
+        statusBadge = `<span style="font-size:10.5px; color:#94a3b8; font-weight:600;">공연 종료 (${String(p.endHour).padStart(2,'0')}:${String(p.endMin).padStart(2,'0')})</span>`;
+      }
 
       return `
         <div class="program-item-card" data-program-id="${p.id}" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:14px; margin-bottom:10px; box-shadow:0 1px 4px rgba(15,23,42,0.04); transition:all 0.15s;">
           <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
             <div style="display:flex; align-items:center; gap:6px;">
-              <span class="card-badge ${isStadium ? 'live' : 'success'}" style="font-size:10.5px;">
+              <span class="card-badge ${isStadium ? 'danger' : 'success'}" style="font-size:10.5px;">
                 ${p.venue}
               </span>
-              <span style="font-size:11px; color:#64748b; font-weight:700;">${p.time}</span>
+              ${statusBadge}
             </div>
             <button class="fav-toggle-btn" data-program-id="${p.id}" style="background:none; border:none; font-size:18px; cursor:pointer; color:${isFav ? '#e11d48' : '#cbd5e1'};">
               ${isFav ? '❤️' : '🤍'}

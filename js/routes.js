@@ -43,7 +43,9 @@ class RoutesController {
     const container = document.getElementById("routes-list-container");
     if (!container) return;
 
-    const { recommendedRoutes } = window.FESTIVAL_DATA;
+    const recommendedRoutes = window.FESTIVAL_DATA.getDynamicRoutes 
+      ? window.FESTIVAL_DATA.getDynamicRoutes(new Date())
+      : window.FESTIVAL_DATA.recommendedRoutes;
 
     container.innerHTML = recommendedRoutes.map((route, idx) => {
       const isSelected = this.selectedRouteId === route.id || idx === 0;
@@ -288,7 +290,9 @@ class RoutesController {
 
   // 5. 동선 안내 시작 모달
   startRouteNavigation(routeId) {
-    const { recommendedRoutes } = window.FESTIVAL_DATA;
+    const recommendedRoutes = window.FESTIVAL_DATA.getDynamicRoutes 
+      ? window.FESTIVAL_DATA.getDynamicRoutes(new Date())
+      : window.FESTIVAL_DATA.recommendedRoutes;
     const route = recommendedRoutes.find(r => r.id === routeId);
     if (!route) return;
 
@@ -405,7 +409,9 @@ class RoutesController {
 
   // 6. Web Share API 기반 공유
   shareRoute(routeId) {
-    const { recommendedRoutes } = window.FESTIVAL_DATA;
+    const recommendedRoutes = window.FESTIVAL_DATA.getDynamicRoutes 
+      ? window.FESTIVAL_DATA.getDynamicRoutes(new Date())
+      : window.FESTIVAL_DATA.recommendedRoutes;
     const route = recommendedRoutes.find(r => r.id === routeId);
     if (!route) return;
 

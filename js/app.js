@@ -1,16 +1,21 @@
 /**
  * 천안 J3D LAB - 흥타령 AI FLOW
- * 메인 앱 컨트롤러 (탭 전환, GPS, BIS 셔틀, 프로그램 검색, 글로벌 토스트)
+ * 실시간 시간 동기화(Live Time Synchronizer) & 통합 앱 컨트롤러
  */
+
+let g_currentLiveDate = new Date(); // 실제 현재 시간
+let g_liveTimeTimer = null;
+let g_isLiveMode = true;
 
 document.addEventListener("DOMContentLoaded", () => {
   initApp();
 });
 
 function initApp() {
-  renderHomeData();
+  startLiveClockEngine();
   bindNavigation();
   bindGlobalControls();
+  bindTimeWarpChips();
 
   // 하위 모듈 초기화
   if (window.flowMap) window.flowMap.init();
@@ -21,41 +26,124 @@ function initApp() {
 
   // 초기 브리핑 토스트
   setTimeout(() => {
-    showToast("🎉 천안흥타령춤축제 2026 AI FLOW 가동 중");
+    showToast("⚡ 현재 시각 기준 실시간 AI 교통·주차 분석 가동 중");
   }, 600);
 }
 
-// 1. 홈 화면 데이터 바인딩
-function renderHomeData() {
-  const { meta, venues } = window.FESTIVAL_DATA;
+// 1. 실제 시간 기준 매 초 실시간 동적 분석 엔진 (Live Clock Engine)
+function startLiveClockEngine() {
+  updateRealtimeAnalysis();
 
-  // 날씨 및 일시
-  const tempEl = document.getElementById("weather-temp");
-  if (tempEl) tempEl.innerText = `${meta.weather.temp}°C`;
+  if (g_liveTimeTimer) clearInterval(g_liveTimeTimer);
+  g_liveTimeTimer = setInterval(() => {
+    if (g_isLiveMode) {
+      g_currentLiveDate = new Date();
+      updateRealtimeAnalysis();
+    }
+  }, 1000);
+}
 
-  const weatherPillEl = document.getElementById("weather-condition");
-  if (weatherPillEl) weatherPillEl.innerText = `${meta.weather.icon} ${meta.weather.condition}`;
+function bindTimeWarpChips() {
+  document.querySelectorAll(".time-warp-chip").forEach(chip => {
+    chip.addEventListener("click", (e) => {
+      document.querySelectorAll(".time-warp-chip").forEach(c => {
+        c.classList.remove("active");
+        c.style.background = "#ffffff";
+        c.style.color = "#475569";
+        c.style.border = "1px solid #cbd5e1";
+      });
 
+      const target = e.currentTarget;
+      target.classList.add("active");
+      target.style.background = "#2563eb";
+      target.style.color = "#ffffff";
+      target.style.border = "none";
+
+      const mode = target.dataset.mode;
+      if (mode === "live") {
+        g_isLiveMode = true;
+        g_currentLiveDate = new Date();
+        updateRealtimeAnalysis();
+        showToast("⚡ 실제 현재 시각으로 실시간 동기화되었습니다.");
+      } else if (mode === "peak-day") {
+        g_isLiveMode = false;
+        // 2026-09-25 14:30:00 (낮 피크)
+        g_currentLiveDate = new Date(2026, 8, 25, 14, 30, 0);
+        updateRealtimeAnalysis();
+        showToast("☀️ 축제 3일차 한낮 피크(14:30) 시뮬레이션 적용됨");
+      } else if (mode === "peak-night") {
+        g_isLiveMode = false;
+        // 2026-09-25 19:30:00 (야간 퍼레이드 피크)
+        g_currentLiveDate = new Date(2026, 8, 25, 19, 30, 0);
+        updateRealtimeAnalysis();
+        showToast("🌙 축제 3일차 야간 퍼레이드 피크(19:30) 시뮬레이션 적용됨");
+      }
+
+      // 추천 동선 및 프로그램 타임테이블도 해당 시간 기준으로 재렌더링
+      if (window.routesController && window.routesController.renderRoutes) {
+        window.routesController.renderRoutes();
+      }
+      if (window.programSearch && window.programSearch.renderProgramsList) {
+        window.programSearch.renderProgramsList();
+      }
+    });
+  });
+}
+
+function updateRealtimeAnalysis() {
+  const { FESTIVAL_DATA } = window;
+  if (!FESTIVAL_DATA || !FESTIVAL_DATA.calculateRealtimeTraffic) return;
+
+  // 현재 시각 기준 실시간 분석 데이터 동적 산출
+  const liveAnalysis = FESTIVAL_DATA.calculateRealtimeTraffic(g_currentLiveDate);
+
+  // 상단 시계 표출
   const dateEl = document.getElementById("festival-date-text");
-  if (dateEl) dateEl.innerText = meta.currentTimestamp;
+  if (dateEl) {
+    dateEl.innerText = `${liveAnalysis.dateString} ${liveAnalysis.timeString} (실시간)`;
+  }
 
-  // 종합운동장(서북권)
-  const st = venues.stadium;
-  setElementText("home-stadium-name", st.name);
+  // 1. 종합운동장(서북권) 실시간 반영
+  const st = liveAnalysis.stadium;
   setElementText("home-stadium-load", st.currentLoad);
-  setElementText("home-stadium-pred30", `${st.predictedLoad30}pt`);
-  setElementText("home-stadium-pred60", `${st.predictedLoad60}pt`);
+  setElementText("home-stadium-pred30", `${st.pred30}pt ⚠️`);
+  setElementText("home-stadium-pred60", `${st.pred60}pt 🚨`);
+  setElementText("home-stadium-wait-time", st.waitTimeText);
+  setElementText("dist-to-stadium-wait", st.waitTimeText);
+
   const stBar = document.getElementById("home-stadium-bar");
   if (stBar) stBar.style.width = `${st.currentLoad}%`;
 
-  // 삼거리공원(동남권)
-  const sg = venues.samgeori;
-  setElementText("home-samgeori-name", sg.name);
+  const stTag = document.getElementById("home-stadium-status-tag");
+  if (stTag) {
+    stTag.className = `venue-status-tag ${st.level === 'danger' ? 'crowded' : st.level === 'warning' ? 'slow' : 'smooth'}`;
+    stTag.innerText = `🅿️ ${st.waitTimeText}`;
+  }
+
+  // 2. 삼거리공원(동남권) 실시간 반영
+  const sg = liveAnalysis.samgeori;
   setElementText("home-samgeori-load", sg.currentLoad);
-  setElementText("home-samgeori-pred30", `${sg.predictedLoad30}pt`);
-  setElementText("home-samgeori-pred60", `${sg.predictedLoad60}pt`);
+  setElementText("home-samgeori-pred30", `${sg.pred30}pt 쾌적`);
+  setElementText("home-samgeori-pred60", `${sg.pred60}pt 보통`);
+
   const sgBar = document.getElementById("home-samgeori-bar");
   if (sgBar) sgBar.style.width = `${sg.currentLoad}%`;
+
+  // 3. 지도 탭 예측 버튼 시각 동적 라벨 (현재시각 +30분, +60분)
+  const d30 = new Date(g_currentLiveDate.getTime() + 30 * 60000);
+  const d60 = new Date(g_currentLiveDate.getTime() + 60 * 60000);
+  const time30Str = `${String(d30.getHours()).padStart(2, '0')}:${String(d30.getMinutes()).padStart(2, '0')}`;
+  const time60Str = `${String(d60.getHours()).padStart(2, '0')}:${String(d60.getMinutes()).padStart(2, '0')}`;
+
+  const btn30 = document.getElementById("map-btn-pred30");
+  const btn60 = document.getElementById("map-btn-pred60");
+  if (btn30) btn30.innerText = `+30분 (${time30Str})`;
+  if (btn60) btn60.innerText = `+60분 (${time60Str})`;
+
+  // 지도 모듈에 실시간 교차로 데이터 공급
+  if (window.flowMap && window.flowMap.updateDynamicIntersections) {
+    window.flowMap.updateDynamicIntersections(liveAnalysis);
+  }
 }
 
 function setElementText(id, text) {
@@ -65,7 +153,6 @@ function setElementText(id, text) {
 
 // 2. 탭 네비게이션 제어
 function bindNavigation() {
-  // 하단 탭 버튼 클릭 이벤트
   document.querySelectorAll(".nav-item").forEach(item => {
     item.addEventListener("click", (e) => {
       const targetTab = e.currentTarget.dataset.tab;
@@ -73,7 +160,6 @@ function bindNavigation() {
     });
   });
 
-  // 본문 내 바로가기 링크/버튼 이벤트 (data-goto-tab 속성 활용)
   document.addEventListener("click", (e) => {
     const trigger = e.target.closest("[data-goto-tab]");
     if (trigger) {
@@ -82,14 +168,12 @@ function bindNavigation() {
     }
   });
 
-  // 상단 티커 클릭 시 운영자 탭으로 이동
   document.getElementById("live-ticker-banner")?.addEventListener("click", () => {
     switchTab("tab-operator");
   });
 }
 
 function switchTab(tabId) {
-  // 탭 화면 활성화
   document.querySelectorAll(".tab-screen").forEach(screen => {
     screen.classList.remove("active");
   });
@@ -97,12 +181,10 @@ function switchTab(tabId) {
   const activeScreen = document.getElementById(tabId);
   if (activeScreen) {
     activeScreen.classList.add("active");
-    // 스크롤 상단 리셋
     const scrollContainer = document.querySelector(".app-content");
     if (scrollContainer) scrollContainer.scrollTop = 0;
   }
 
-  // 하단 탭바 활성화 표시
   document.querySelectorAll(".nav-item").forEach(item => {
     if (item.dataset.tab === tabId) {
       item.classList.add("active");
@@ -111,7 +193,6 @@ function switchTab(tabId) {
     }
   });
 
-  // 지도 탭 활성화 시 맵 크기 리프레시
   if (tabId === "tab-map" && window.flowMap) {
     window.flowMap.invalidateSize();
   }
@@ -119,7 +200,6 @@ function switchTab(tabId) {
 
 // 3. 글로벌 컨트롤 (데스크탑 프레임 토글, 타임테이블/검색 모달)
 function bindGlobalControls() {
-  // 데스크탑 풀스크린 토글
   const fullscreenBtn = document.getElementById("fullscreen-toggle-btn");
   const desktopWrapper = document.getElementById("desktop-wrapper");
   if (fullscreenBtn && desktopWrapper) {
@@ -131,7 +211,6 @@ function bindGlobalControls() {
     });
   }
 
-  // 축제 타임테이블 & 프로그램 검색 모달 토글
   const timetableBtn = document.getElementById("view-timetable-btn");
   const timetableModal = document.getElementById("timetable-modal-overlay");
   if (timetableBtn && timetableModal) {
@@ -168,6 +247,5 @@ function showToast(message) {
   }, 2800);
 }
 
-// 전역 공개
 window.showToast = showToast;
 window.switchTab = switchTab;
