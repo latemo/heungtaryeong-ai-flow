@@ -1,6 +1,6 @@
 /**
  * 천안 J3D LAB - 흥타령 AI FLOW
- * 메인 앱 컨트롤러 (탭 전환, 테마, 반응형 모드, 글로벌 토스트)
+ * 메인 앱 컨트롤러 (탭 전환, GPS, BIS 셔틀, 프로그램 검색, 글로벌 토스트)
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -16,6 +16,8 @@ function initApp() {
   if (window.flowMap) window.flowMap.init();
   if (window.routesController) window.routesController.init();
   if (window.operatorController) window.operatorController.init();
+  if (window.shuttleBis) window.shuttleBis.init();
+  if (window.programSearch) window.programSearch.init();
 
   // 초기 브리핑 토스트
   setTimeout(() => {
@@ -61,25 +63,26 @@ function setElementText(id, text) {
   if (el) el.innerText = text;
 }
 
-// 2. 탭 네비게이션 전환
+// 2. 탭 네비게이션 제어
 function bindNavigation() {
-  const navItems = document.querySelectorAll(".nav-item");
-  navItems.forEach(item => {
+  // 하단 탭 버튼 클릭 이벤트
+  document.querySelectorAll(".nav-item").forEach(item => {
     item.addEventListener("click", (e) => {
       const targetTab = e.currentTarget.dataset.tab;
       switchTab(targetTab);
     });
   });
 
-  // 홈의 퀵 액션 바로가기 버튼들
-  document.querySelectorAll("[data-goto-tab]").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const targetTab = e.currentTarget.dataset.gotoTab;
+  // 본문 내 바로가기 링크/버튼 이벤트 (data-goto-tab 속성 활용)
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest("[data-goto-tab]");
+    if (trigger) {
+      const targetTab = trigger.dataset.gotoTab;
       switchTab(targetTab);
-    });
+    }
   });
 
-  // 상단 티커 클릭 시 운영자 탭으로 바로 이동하여 조치 확인 가능
+  // 상단 티커 클릭 시 운영자 탭으로 이동
   document.getElementById("live-ticker-banner")?.addEventListener("click", () => {
     switchTab("tab-operator");
   });
@@ -114,19 +117,8 @@ function switchTab(tabId) {
   }
 }
 
-// 3. 글로벌 컨트롤 (데스크탑 프레임 토글, 다크/라이트 테마)
+// 3. 글로벌 컨트롤 (데스크탑 프레임 토글, 타임테이블/검색 모달)
 function bindGlobalControls() {
-  // 테마 토글
-  const themeBtn = document.getElementById("theme-toggle-btn");
-  if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("light-mode");
-      const isLight = document.body.classList.contains("light-mode");
-      themeBtn.innerHTML = isLight ? `<span>🌙</span> 다크 모드` : `<span>☀️</span> 라이트 모드`;
-      showToast(isLight ? "☀️ 라이트 모드로 전환되었습니다." : "🌙 다크 모드로 전환되었습니다.");
-    });
-  }
-
   // 데스크탑 풀스크린 토글
   const fullscreenBtn = document.getElementById("fullscreen-toggle-btn");
   const desktopWrapper = document.getElementById("desktop-wrapper");
@@ -139,12 +131,13 @@ function bindGlobalControls() {
     });
   }
 
-  // 축제 타임테이블 모달 토글
+  // 축제 타임테이블 & 프로그램 검색 모달 토글
   const timetableBtn = document.getElementById("view-timetable-btn");
   const timetableModal = document.getElementById("timetable-modal-overlay");
   if (timetableBtn && timetableModal) {
     timetableBtn.addEventListener("click", () => {
       timetableModal.classList.add("active");
+      if (window.programSearch) window.programSearch.renderProgramsList();
     });
 
     document.getElementById("close-timetable-btn")?.addEventListener("click", () => {
@@ -160,16 +153,21 @@ function showToast(message) {
 
   const toast = document.createElement("div");
   toast.className = "toast";
-  toast.innerHTML = `<span>✨</span> <div>${message}</div>`;
+  toast.innerHTML = `
+    <span>📢</span>
+    <span>${message}</span>
+  `;
+
   container.appendChild(toast);
 
   setTimeout(() => {
-    toast.style.transition = "opacity 0.3s ease, transform 0.3s ease";
     toast.style.opacity = "0";
     toast.style.transform = "translateY(-10px)";
-    setTimeout(() => toast.remove(), 300);
+    toast.style.transition = "all 0.25s ease";
+    setTimeout(() => toast.remove(), 250);
   }, 2800);
 }
 
+// 전역 공개
 window.showToast = showToast;
 window.switchTab = switchTab;

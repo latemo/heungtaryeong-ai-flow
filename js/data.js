@@ -1,17 +1,6 @@
 /**
  * 천안 J3D LAB - 흥타령 AI FLOW
- * 핵심 데이터 및 AI 예측 시뮬레이션 모델 데이터셋
- * 
- * [데이터 출처 및 기준]
- * - 2025.09 천안시 교차로 교통량 원문 174,960행
- * - 2025-2026 천안흥타령춤축제 공식 프로그램 102건, 부스 81건, 화장실 154건
- * - AI 모델: 요일·시간 중앙값 기반 예측 (WAPE 9.29%, 베이스라인 대비 52.67% 오차 개선)
- * 
- * [Data Trust 원칙 - 용어 정의]
- * - 접근 부하: 교차로 차량 통과량 기반 상대 지수 (0~100)
- * - 예상 포화: 정적 면수 · 거리 · 유입 시나리오 기반 포화율 (%)
- * - 보행 혼잡: 프로그램 · 무대 배치 기반 대리 지표
- * - 상권 분산: 후보 노출 · 열람 · 전환 클릭 기반 지표
+ * 핵심 데이터 및 AI 예측, 시설물(화장실 154개소/부스 81개소), 길찾기 연동 데이터셋
  */
 
 const FESTIVAL_DATA = {
@@ -54,22 +43,18 @@ const FESTIVAL_DATA = {
       subName: "서북권 메인 거점 (주무대 5곳)",
       lat: 36.8227,
       lng: 127.1192,
-      color: "#ff4d4f",
+      color: "#e11d48",
       description: "접근 수요가 집중되는 전통적 중심축. 주차 대기 발생 빈도 높음",
       stages: ["흥타령극장(주무대)", "천안극장", "신명극장", "버드나무극장", "스트릿댄스파크"],
-      currentLoad: 72,      // 현재 접근 부하
-      predictedLoad30: 84,  // 30분 뒤
-      predictedLoad60: 93,  // 60분 뒤 (초혼잡)
+      currentLoad: 72,
+      predictedLoad30: 84,
+      predictedLoad60: 93,
       parkingStatus: {
         totalSpaces: 2450,
-        estimatedOccupancyRate: 88, // 예상 포화율
-        statusText: "혼잡 (입차 대기 25~35분 소요 예상)",
+        estimatedOccupancyRate: 88,
+        statusText: "혼잡 (입차 대기 35분 이상)",
         level: "danger"
-      },
-      eventsNow: [
-        { time: "14:30 - 16:30", title: "전국대학 무용경연대회 결선", stage: "흥타령극장", crowd: "매우 혼잡" },
-        { time: "15:00 - 17:00", title: "거리댄스 퍼레이드 사전 리허설", stage: "종합운동장 광장", crowd: "혼잡" }
-      ]
+      }
     },
     samgeori: {
       id: "samgeori",
@@ -77,22 +62,18 @@ const FESTIVAL_DATA = {
       subName: "동남권 분산 거점 (문화·상권 연계축)",
       lat: 36.7885,
       lng: 127.1698,
-      color: "#52c41a",
+      color: "#059669",
       description: "추진 중인 분산 거점. 능소호수 피크닉, 전통춤 경연 및 원도심 상권 연결축",
       stages: ["삼거리전통극장", "능소호수무대", "흥마당버스킹존", "청년문화광장"],
-      currentLoad: 38,      // 현재 접근 부하 (여유)
-      predictedLoad30: 45,  // 30분 뒤
-      predictedLoad60: 52,  // 60분 뒤 (원활)
+      currentLoad: 38,
+      predictedLoad30: 45,
+      predictedLoad60: 52,
       parkingStatus: {
         totalSpaces: 1800,
-        estimatedOccupancyRate: 42, // 예상 포화율
+        estimatedOccupancyRate: 42,
         statusText: "원활 (즉시 입차 가능, 임시 셔틀 운영)",
         level: "success"
-      },
-      eventsNow: [
-        { time: "14:30 - 16:00", title: "명인명무 전통춤 한마당 & 흥타령 마당극", stage: "삼거리전통극장", crowd: "쾌적" },
-        { time: "15:00 - 18:00", title: "능소 호수 가족 피크닉 & 버스킹 페스타", stage: "능소호수무대", crowd: "여유" }
-      ]
+      }
     }
   },
 
@@ -204,17 +185,45 @@ const FESTIVAL_DATA = {
     }
   ],
 
-  // 순환 셔틀버스 노선 (서북권 ~ 동남권 분산 지원)
+  // 기획서 8p 실데이터 기반: 축제장 주요 화장실 (154개소 정제 데이터셋 대표 스팟)
+  toilets: [
+    { id: "T-01", name: "종합운동장 주경기장 1층 안심화장실", zone: "서북권", lat: 36.8232, lng: 127.1188, handicap: true, babyCare: true },
+    { id: "T-02", name: "흥타령극장 광장 이동형 안심화장실 A", zone: "서북권", lat: 36.8220, lng: 127.1205, handicap: true, babyCare: false },
+    { id: "T-03", name: "천안시청 민원실 개방 화장실", zone: "서북권", lat: 36.8152, lng: 127.1142, handicap: true, babyCare: true },
+    { id: "T-04", name: "삼거리공원 능소호수 정자 화장실", zone: "동남권", lat: 36.7880, lng: 127.1702, handicap: true, babyCare: true },
+    { id: "T-05", name: "삼거리공원 제2임시주차장 안심화장실", zone: "동남권", lat: 36.7895, lng: 127.1670, handicap: true, babyCare: false },
+    { id: "T-06", name: "남산중앙시장 고객지원센터 화장실", zone: "원도심", lat: 36.8025, lng: 127.1532, handicap: true, babyCare: true },
+    { id: "T-07", name: "천안역 동부광장 공중화장실", zone: "원도심", lat: 36.8092, lng: 127.1478, handicap: true, babyCare: false }
+  ],
+
+  // 기획서 8p 실데이터 기반: 공식 체험/먹거리/안전 부스 (81개소 정제 데이터셋 대표 스팟)
+  booths: [
+    { id: "B-01", name: "삼거리공원 천안 명품 호두과자 체험 부스", category: "체험/특산물", zone: "동남권", lat: 36.7878, lng: 127.1685, desc: "전통 가마솥 호두과자 굽기 체험 & 할인 판매" },
+    { id: "B-02", name: "삼거리 능소 청년 푸드트럭 빌리지 (12종)", category: "푸드/미식", zone: "동남권", lat: 36.7890, lng: 127.1710, desc: "스테이크, 팟타이, 츄러스, 지역 수제맥주" },
+    { id: "B-03", name: "남산중앙시장 전통 막걸리 & 전 페스타 부스", category: "푸드/미식", zone: "원도심", lat: 36.8020, lng: 127.1538, desc: "천안 쌀막걸리와 녹두빈대떡 특별 시식회" },
+    { id: "B-04", name: "종합운동장 공식 종합안내 & 미아보호소", category: "안내/안전", zone: "서북권", lat: 36.8225, lng: 127.1195, desc: "미아방지 팔찌 배부, 휠체어/유모차 무료 대여" },
+    { id: "B-05", name: "삼거리공원 응급의료지원센터 & 수유실", category: "의료/편의", zone: "동남권", lat: 36.7882, lng: 127.1695, desc: "간호사 상주, 냉온정수기 및 전자레인지 완비" }
+  ],
+
+  // 주차장 및 셔틀 환승장
+  parkings: [
+    { id: "P-01", name: "천안종합운동장 주차장 (만차 임박)", capacity: "2,450면", rate: 88, lat: 36.8235, lng: 127.1210, fee: "무료" },
+    { id: "P-02", name: "천안시청 임시주차장", capacity: "1,200면", rate: 75, lat: 36.8148, lng: 127.1130, fee: "무료 (셔틀 연계)" },
+    { id: "P-03", name: "천안삼거리공원 대형 임시주차장 (여유)", capacity: "1,800면", rate: 42, lat: 36.7898, lng: 127.1660, fee: "무료 (즉시 입차)" }
+  ],
+
+  // 순환 셔틀버스 노선 및 정류장
   shuttleRoute: {
     name: "흥타령 AI 안심 셔틀 (서북 ↔ 동남 급행)",
-    interval: "10분 간격 (총 8대 순환 운행)",
+    intervalMin: 10,
+    totalBuses: 8,
     stops: [
-      { name: "천안종합운동장(북문)", lat: 36.8245, lng: 127.1190 },
-      { name: "천안시청정류장", lat: 36.8150, lng: 127.1140 },
-      { name: "봉명역 셔틀스톱", lat: 36.8010, lng: 127.1350 },
-      { name: "천안역 동부광장(상권연계)", lat: 36.8090, lng: 127.1475 },
-      { name: "남산중앙시장(먹거리골목)", lat: 36.8020, lng: 127.1530 },
-      { name: "천안삼거리공원(정문)", lat: 36.7885, lng: 127.1698 }
+      { id: "ST-01", name: "천안종합운동장(북문)", lat: 36.8245, lng: 127.1190 },
+      { id: "ST-02", name: "천안시청 정류장", lat: 36.8150, lng: 127.1140 },
+      { id: "ST-03", name: "봉명역 셔틀스톱", lat: 36.8010, lng: 127.1350 },
+      { id: "ST-04", name: "천안역 동부광장(상권연계)", lat: 36.8090, lng: 127.1475 },
+      { id: "ST-05", name: "남산중앙시장(먹거리골목)", lat: 36.8020, lng: 127.1530 },
+      { id: "ST-06", name: "천안삼거리공원(정문)", lat: 36.7885, lng: 127.1698 }
     ]
   },
 
@@ -236,21 +245,27 @@ const FESTIVAL_DATA = {
           time: "14:30",
           place: "천안삼거리공원 제2임시주차장",
           desc: "대기 없이 3분 내 여유로운 주차 완료",
-          type: "parking"
+          type: "parking",
+          lat: 36.7898,
+          lng: 127.1660
         },
         {
           order: 2,
           time: "15:00",
           place: "능소호수 잔디광장 & 전통극장",
           desc: "명인명무 전통춤 관람 및 호수 피크닉 (잔디 쉼터 완비)",
-          type: "event"
+          type: "event",
+          lat: 36.7880,
+          lng: 127.1702
         },
         {
           order: 3,
           time: "16:40",
           place: "남산중앙시장 전통 먹거리골목",
           desc: "순환 셔틀로 7분 이동, 천안 호두과자 & 칼국수 맛집 투어 (10% 할인 쿠폰)",
-          type: "commerce"
+          type: "commerce",
+          lat: 36.8020,
+          lng: 127.1530
         }
       ],
       commerceBenefit: "남산중앙시장 10% 추가할인 + 천안사랑카드 10% 캐시백"
@@ -271,21 +286,27 @@ const FESTIVAL_DATA = {
           time: "15:00",
           place: "천안역 동부광장 & 명동 패션거리",
           desc: "청년 창업몰 플리마켓 구경 및 감성 카페 디저트 투어",
-          type: "commerce"
+          type: "commerce",
+          lat: 36.8090,
+          lng: 127.1475
         },
         {
           order: 2,
           time: "16:30",
           place: "흥타령 셔틀 탑승 (동남권 직통)",
           desc: "지정 셔틀로 혼잡 정체 없이 삼거리공원 청년문화광장 이동",
-          type: "shuttle"
+          type: "shuttle",
+          lat: 36.8090,
+          lng: 127.1475
         },
         {
           order: 3,
           time: "17:00",
           place: "삼거리공원 스트릿댄스 & DJ 버스킹",
           desc: "국제 댄서들과 함께하는 프리스타일 댄스 배틀 및 일몰 야경 감상",
-          type: "event"
+          type: "event",
+          lat: 36.7885,
+          lng: 127.1698
         }
       ],
       commerceBenefit: "명동거리 청년카페 음료 1,000원 즉시 할인권 증정"
@@ -306,28 +327,34 @@ const FESTIVAL_DATA = {
           time: "14:30",
           place: "종합운동장 흥타령극장 (낮 시간)",
           desc: "피크 시작 전 전국대학 무용경연 관람 (혼잡 시작 16시 전 퇴장)",
-          type: "event"
+          type: "event",
+          lat: 36.8227,
+          lng: 127.1192
         },
         {
           order: 2,
           time: "16:15",
           place: "남부대로 우회축 이동 (차량 15분)",
           desc: "AI FLOW 권고 우회도로를 통해 극심 정체 없이 동남권 이동",
-          type: "route"
+          type: "route",
+          lat: 36.7865,
+          lng: 127.1440
         },
         {
           order: 3,
           time: "17:00",
           place: "삼거리공원 야간 댄스파티 & 천안맛집",
           desc: "여유로운 저녁 식사 후 능소호수 드론 라이트쇼 감상",
-          type: "event"
+          type: "event",
+          lat: 36.7885,
+          lng: 127.1698
         }
       ],
       commerceBenefit: "동남권 지정 음식점 메밀막국수/석갈비 1인 2,000원 할인"
     }
   ],
 
-  // 동남권 및 원도심 상권 제휴 데이터 (상권 분산 지표 연동)
+  // 동남권 및 원도심 상권 제휴 데이터
   merchants: [
     {
       id: "m-1",
@@ -339,7 +366,9 @@ const FESTIVAL_DATA = {
       views: 3420,
       conversions: 890,
       badge: "천안 1호 명물",
-      address: "천안시 동남구 대흥로 233"
+      address: "천안시 동남구 대흥로 233",
+      lat: 36.8098,
+      lng: 127.1482
     },
     {
       id: "m-2",
@@ -351,7 +380,9 @@ const FESTIVAL_DATA = {
       views: 4150,
       conversions: 1120,
       badge: "가성비 최고",
-      address: "천안시 동남구 사직로 7"
+      address: "천안시 동남구 사직로 7",
+      lat: 36.8022,
+      lng: 127.1534
     },
     {
       id: "m-3",
@@ -363,7 +394,9 @@ const FESTIVAL_DATA = {
       views: 2890,
       conversions: 740,
       badge: "가족 식사 추천",
-      address: "천안시 동남구 충절로 380"
+      address: "천안시 동남구 충절로 380",
+      lat: 36.7875,
+      lng: 127.1688
     },
     {
       id: "m-4",
@@ -375,11 +408,27 @@ const FESTIVAL_DATA = {
       views: 1980,
       conversions: 520,
       badge: "인스타 감성",
-      address: "천안시 동남구 버들로 18"
+      address: "천안시 동남구 버들로 18",
+      lat: 36.8082,
+      lng: 127.1495
     }
   ],
 
-  // 기획서 6~7p City Operator (시정 운영자) 시나리오 데이터
+  // 102건 공식 프로그램 중 핵심 16선 (검색 및 타임테이블용)
+  programs: [
+    { id: "P-01", title: "전국대학 무용경연대회 결선", date: "2026-09-25", time: "14:30 - 16:30", venue: "종합운동장", stage: "흥타령극장(주무대)", tag: "경연/현대무용", isHot: true },
+    { id: "P-02", title: "명인명무 전통춤 한마당 & 흥타령 마당극", date: "2026-09-25", time: "14:30 - 16:00", venue: "삼거리공원", stage: "삼거리전통극장", tag: "전통춤/마당극", isHot: false },
+    { id: "P-03", title: "능소 호수 가족 피크닉 & 어쿠스틱 버스킹", date: "2026-09-25", time: "15:00 - 18:00", venue: "삼거리공원", stage: "능소호수무대", tag: "가족/버스킹", isHot: true },
+    { id: "P-04", title: "거리댄스 퍼레이드 사전 리허설", date: "2026-09-25", time: "15:00 - 17:00", venue: "종합운동장", stage: "종합운동장 광장", tag: "퍼레이드", isHot: false },
+    { id: "P-05", title: "국제 댄스 배틀 16강 (스트릿 댄스 파크)", date: "2026-09-25", time: "16:30 - 19:00", venue: "종합운동장", stage: "스트릿댄스파크", tag: "스트릿댄스", isHot: true },
+    { id: "P-06", title: "삼거리 청년 플래시몹 & K-POP 커버댄스", date: "2026-09-25", time: "17:00 - 18:30", venue: "삼거리공원", stage: "청년문화광장", tag: "K-POP/참여형", isHot: false },
+    { id: "P-07", title: "거리댄스 퍼레이드 본선 (1부)", date: "2026-09-25", time: "18:30 - 20:00", venue: "종합운동장", stage: "종합운동장 특설대로", tag: "퍼레이드/하이라이트", isHot: true },
+    { id: "P-08", title: "능소 호수 미디어 파사드 & 드론 라이트쇼", date: "2026-09-25", time: "20:00 - 20:40", venue: "삼거리공원", stage: "능소호수 상공", tag: "드론쇼/야경", isHot: true },
+    { id: "P-09", title: "전국 읍면동 춤경연 본선 (2일차)", date: "2026-09-26", time: "13:00 - 15:30", venue: "삼거리공원", stage: "삼거리전통극장", tag: "시민참여", isHot: false },
+    { id: "P-10", title: "세계 민속춤 경연 결선", date: "2026-09-26", time: "17:00 - 19:30", venue: "종합운동장", stage: "흥타령극장", tag: "국제교류", isHot: true }
+  ],
+
+  // 시정 운영자 시나리오 데이터
   operatorScenarios: [
     {
       id: "OP-ALERT-01",
@@ -390,7 +439,7 @@ const FESTIVAL_DATA = {
       evidence: "교차로 통과량 2,410대/h (전주 대비 +34%), WAPE 9.29% 신뢰도",
       recommendedAction: "VMS 전광판 삼거리공원 우회 표출 및 시민앱 삼거리 무대 추천 푸시 발송",
       channelTargets: ["VMS 전광판 4개소", "흥타령 시민앱 긴급 브리핑", "모바일 웹 상단 공지"],
-      status: "pending", // pending -> approved
+      status: "pending",
       impactProjection: "종합운동장 유입 차량 약 18% 동남권 전환 유도 가능"
     },
     {
@@ -420,7 +469,37 @@ const FESTIVAL_DATA = {
   ]
 };
 
+// 실시간 내비게이션 딥링크 생성 유틸리티
+const NavigationUtils = {
+  // 카카오맵 길찾기 웹 & 앱 URL 생성
+  getKakaoMapUrl(lat, lng, name) {
+    const encodedName = encodeURIComponent(name);
+    // 모바일 웹 길찾기: 누구나 앱 설치 없이도 즉시 브라우저에서 열림
+    return `https://map.kakao.com/link/to/${encodedName},${lat},${lng}`;
+  },
+
+  // 네이버 지도 길찾기 웹 & 앱 URL 생성
+  getNaverMapUrl(lat, lng, name) {
+    const encodedName = encodeURIComponent(name);
+    return `https://map.naver.com/v5/directions/-/-/-/transit?c=${lng},${lat},15,0,0,0,dh&destination=${encodedName},${lng},${lat}`;
+  },
+
+  // 두 좌표 간 직선거리 계산 (km)
+  getDistanceKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // 지구 반경 (km)
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return +(R * c).toFixed(1);
+  }
+};
+
 // 전역 내보내기
 if (typeof window !== "undefined") {
   window.FESTIVAL_DATA = FESTIVAL_DATA;
+  window.NavigationUtils = NavigationUtils;
 }
