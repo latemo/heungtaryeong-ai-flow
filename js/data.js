@@ -363,7 +363,38 @@ const FESTIVAL_DATA = {
         commerceBenefit: "동남권 지정 음식점 메밀막국수/석갈비 1인 2,000원 할인"
       }
     ];
-  }
+  },
+
+  // 시정 운영자 의사결정 시나리오
+  operatorScenarios: [
+    {
+      id: "OP-ALERT-01",
+      level: "warning",
+      detectedTime: "14:25:10",
+      title: "서북권 종합운동장 진입로 (번영로) 용량 88% 초과 임계점 도달",
+      evidence: "ITS 검지기 2,410대/h 유입 중, 진입 대기시간 35분 급증 감지",
+      action: "남부대로 우회 권고 및 삼거리공원 무료 임시주차장 분산 메시지 발송",
+      expectedEffect: "서북권 부하 -14pt, 동남권 유입 +18% 전환"
+    },
+    {
+      id: "OP-ALERT-02",
+      level: "commerce",
+      detectedTime: "14:18:40",
+      title: "원도심 명동거리 & 남산중앙시장 유동인구 회복 유도",
+      evidence: "메인무대 집중률 72% 대비 원도심 방문객 -35% 편중 발생",
+      action: "천안사랑카드 10% 추가 캐시백 및 지정 셔틀 정류장 알림 푸시",
+      expectedEffect: "원도심 상권 매출 +22% 견인, 대기시간 분산"
+    },
+    {
+      id: "OP-ALERT-03",
+      level: "info",
+      detectedTime: "13:50:00",
+      title: "삼거리공원 제2임시주차장 1,000면 여유 공간 확보 완료",
+      evidence: "셔틀 순환 주기 10분 정상 유지, 정체 없이 진입 가능",
+      action: "네이버/카카오 길안내 거점을 삼거리공원으로 변경 유도",
+      expectedEffect: "초기 분산 유입률 28% 상승"
+    }
+  ]
 };
 
 // 실시간 내비게이션 딥링크 유틸리티 (출발지: 현재 내 위치 자동 연동)
