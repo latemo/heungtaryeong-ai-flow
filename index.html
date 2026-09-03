@@ -7,6 +7,10 @@
   <meta name="description" content="천안흥타령춤축제 2026 흥타령 AI FLOW - 종합운동장에 몰리는 차량 흐름을 읽고 삼거리공원과 동남권 상권으로 나누는 모바일 정책 웹앱" />
   <title>흥타령 AI FLOW | 천안흥타령춤축제 2026</title>
 
+  <!-- Google Fonts & Pretendard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" />
+
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
@@ -17,25 +21,24 @@
 </head>
 <body>
 
-  <!-- 데스크탑 래퍼 (PC 접속 시 스마트폰 디바이스 목업 프레임 제공) -->
+  <!-- 데스크탑 래퍼 (PC 접속 시 플래그십 스마트폰 목업 프레임 제공) -->
   <div class="desktop-wrapper" id="desktop-wrapper">
     
-    <!-- 데스크탑 상단 컨트롤 바 -->
+    <!-- 데스크탑 상단 플로팅 컨트롤 바 -->
     <div class="desktop-controls">
-      <span style="font-size: 12px; font-weight:700; color: #4f46e5; margin-right: 4px;">
-        🏛️ 천안 J3D LAB · 흥타령 AI FLOW
-      </span>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <span style="font-size:15px;">🏛️</span>
+        <span class="desktop-badge-title">천안 J3D LAB · 흥타령 AI FLOW</span>
+      </div>
       <button class="control-btn" id="fullscreen-toggle-btn" title="전체화면 / 모바일 프레임 모드 전환">
         <span>🖥️</span> 전체화면 모드
       </button>
     </div>
 
-    <!-- 스마트폰 디바이스 쉘 -->
+    <!-- 스마트폰 디바이스 쉘 (티타늄 엣지) -->
     <div class="mobile-device-shell">
-      <!-- 스마트폰 노치 디자인 -->
-      <div class="device-notch">
-        <div class="notch-camera"></div>
-      </div>
+      <!-- 펀치홀 카메라 -->
+      <div class="device-notch"></div>
 
       <!-- 모바일 웹앱 메인 뷰포트 -->
       <div class="app-viewport">
@@ -49,28 +52,28 @@
                 흥타령 AI FLOW
                 <span class="ai-tag">J3D LAB</span>
               </div>
-              <div class="brand-sub">천안흥타령춤축제 2026</div>
+              <div class="brand-sub">천안흥타령춤축제 2026 지능형 운영</div>
             </div>
           </div>
 
           <div class="header-actions">
-            <button class="header-icon-btn" id="view-timetable-btn" title="축제 일정표">
+            <button class="header-icon-btn" id="view-timetable-btn" title="축제 공식 일정표">
               <span>📅</span>
             </button>
-            <button class="header-icon-btn" data-goto-tab="tab-operator" title="운영자 알림 센터">
+            <button class="header-icon-btn" data-goto-tab="tab-operator" title="시정 운영자 알림 센터">
               <span>🔔</span>
               <span class="badge-dot"></span>
             </button>
           </div>
         </header>
 
-        <!-- 긴급 분산 안내 라이브 티커 -->
+        <!-- 스마트 실시간 브로드캐스트 티커 (토스 스타일 스마트 알림 바) -->
         <div class="live-broadcast-ticker" id="live-ticker-banner" title="클릭하여 시정 조치 세부사항 확인">
-          <span class="ticker-icon">📢</span>
+          <span class="ticker-badge">현장 권고</span>
           <span class="ticker-text" id="live-broadcast-text">
-            [현장 권고] 종합운동장 30분 뒤 부하 급증! 삼거리공원 무료 주차장 및 순환 셔틀 이용 권장
+            종합운동장 30분 뒤 부하 급증! 삼거리공원 무료 주차장 및 순환 셔틀 이용 권장
           </span>
-          <span class="ticker-action">상세 ❯</span>
+          <span class="ticker-action">상세보기 ❯</span>
         </div>
 
         <!-- 토스트 알림 컨테이너 -->
@@ -88,16 +91,18 @@
             <div class="hero-status-card">
               <div class="hero-meta-row">
                 <span style="display:flex; align-items:center; gap:6px;">
-                  <span class="pulse-dot" style="color:#a7f3d0;"></span>
+                  <span class="pulse-dot" style="color:#34d399;"></span>
                   <span id="festival-date-text">2026-09-25 14:30 KST (축제 3일차)</span>
                 </span>
-                <span class="card-badge live" style="background:rgba(255,255,255,0.2); color:#fff; border:none;">LIVE</span>
+                <span class="card-badge live" style="background:rgba(255,255,255,0.18); color:#fff; border:1px solid rgba(255,255,255,0.3);">
+                  AI FLOW 가동 중
+                </span>
               </div>
               <h1 class="hero-title" id="hero-dynamic-notice">
-                종합운동장 차량 몰림을 읽고,<br/>삼거리공원으로 여유롭게!
+                종합운동장 차량 흐름을 읽고,<br/>삼거리공원으로 여유롭게!
               </h1>
               <p class="hero-sub">
-                천안시 교차로 데이터 기반 30·60분 예측으로 덜 붐비는 시간과 대안 동선을 안내합니다.
+                천안시 교차로 데이터 기반 30·60분 예측으로 덜 붐비는 시간과 최적 분산 동선을 제시합니다.
               </p>
               <div class="weather-pills-row">
                 <div class="weather-pill">
@@ -111,30 +116,41 @@
                   <span>💨</span>
                   <span>대기질 좋음</span>
                 </div>
+                <div class="weather-pill" style="background:rgba(59,48,232,0.4); border-color:rgba(129,140,248,0.5);">
+                  <span>🎯</span>
+                  <span>WAPE 9.29% 예측</span>
+                </div>
               </div>
             </div>
 
-            <!-- 양대 행사장 실시간 부하 대비 카드 (서북권 vs 동남권) -->
+            <!-- 양대 행사장 인포그래픽 비교 카드 (서북권 vs 동남권) -->
             <div class="venue-compare-container">
               <div class="section-label-row">
-                <span class="section-title">📊 양대 거점 실시간 접근 부하 비교</span>
-                <button class="section-link" data-goto-tab="tab-map">지도 전체보기 ❯</button>
+                <span class="section-title">📊 양대 거점 실시간 접근 부하 인포그래픽</span>
+                <button class="section-link" data-goto-tab="tab-map">실시간 지도 ❯</button>
               </div>
 
               <div class="venue-compare-grid">
                 <!-- 서북권: 천안종합운동장 -->
                 <div class="venue-card stadium" data-goto-tab="tab-map">
                   <div class="venue-header-name" id="home-stadium-name">천안종합운동장</div>
-                  <div class="venue-header-sub">서북권 메인축 · 주무대 5곳</div>
+                  <div class="venue-header-sub">서북권 메인 거점 · 주무대 5곳</div>
 
                   <div class="load-display-box">
                     <div class="load-display-title">
                       <span>접근 부하 지수</span>
-                      <span style="color:#dc2626; font-weight:700;">혼잡</span>
+                      <span style="color:var(--color-danger); font-weight:800;">혼잡</span>
                     </div>
                     <div class="load-number-row">
-                      <span class="load-number red" id="home-stadium-load">72</span>
-                      <span style="font-size:12px; color:var(--text-muted);">/ 100</span>
+                      <div style="display:flex; align-items:baseline; gap:3px;">
+                        <span class="load-number red" id="home-stadium-load">72</span>
+                        <span style="font-size:12px; color:var(--text-placeholder); font-weight:700;">/100</span>
+                      </div>
+                      <!-- 스파크라인 트렌드 상승 그래프 -->
+                      <svg class="sparkline-svg" viewBox="0 0 60 24" title="부하 상승 예측">
+                        <path d="M 4 20 Q 30 14 56 4" fill="none" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="56" cy="4" r="3" fill="#e11d48"/>
+                      </svg>
                     </div>
                     <div class="load-bar-wrap">
                       <div class="load-bar-fill red" id="home-stadium-bar" style="width: 72%;"></div>
@@ -148,12 +164,12 @@
                     </div>
                     <div class="prediction-item">
                       <span class="prediction-label">60분 뒤</span>
-                      <span class="prediction-val" id="home-stadium-pred60" style="color:#dc2626;">93pt 🚨</span>
+                      <span class="prediction-val" id="home-stadium-pred60" style="color:#e11d48;">93pt 🚨</span>
                     </div>
                   </div>
 
                   <div class="venue-status-tag crowded">
-                    🅿️ 주차 대기 30분 이상 소요
+                    🅿️ 주차 대기 35분 이상 소요
                   </div>
                 </div>
 
@@ -165,11 +181,18 @@
                   <div class="load-display-box">
                     <div class="load-display-title">
                       <span>접근 부하 지수</span>
-                      <span style="color:#059669; font-weight:700;">원활</span>
+                      <span style="color:var(--color-success); font-weight:800;">원활</span>
                     </div>
                     <div class="load-number-row">
-                      <span class="load-number green" id="home-samgeori-load">38</span>
-                      <span style="font-size:12px; color:var(--text-muted);">/ 100</span>
+                      <div style="display:flex; align-items:baseline; gap:3px;">
+                        <span class="load-number green" id="home-samgeori-load">38</span>
+                        <span style="font-size:12px; color:var(--text-placeholder); font-weight:700;">/100</span>
+                      </div>
+                      <!-- 스파크라인 트렌드 안정 그래프 -->
+                      <svg class="sparkline-svg" viewBox="0 0 60 24" title="부하 안정 예측">
+                        <path d="M 4 18 Q 30 14 56 10" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="56" cy="10" r="3" fill="#059669"/>
+                      </svg>
                     </div>
                     <div class="load-bar-wrap">
                       <div class="load-bar-fill green" id="home-samgeori-bar" style="width: 38%;"></div>
@@ -194,7 +217,7 @@
               </div>
             </div>
 
-            <!-- 빠른 기능 바로가기 그리드 -->
+            <!-- 빠른 기능 바로가기 위젯 -->
             <div class="quick-action-grid">
               <button class="quick-action-btn" data-goto-tab="tab-map">
                 <div class="quick-action-icon">🗺️</div>
@@ -214,7 +237,7 @@
               </button>
             </div>
 
-            <!-- 지금 덜 붐비는 추천 분산 배너 -->
+            <!-- 지금 덜 붐비는 스마트 추천 동선 하이라이트 -->
             <div class="glass-card highlight">
               <div class="card-header">
                 <div class="card-title">
@@ -222,14 +245,14 @@
                 </div>
                 <span class="card-badge success">대기 45분 절약</span>
               </div>
-              <p style="font-size: 13.5px; color: #0f172a; font-weight:800; margin-bottom: 4px;">
+              <p style="font-size: 15px; color: var(--text-main); font-weight:800; margin-bottom: 4px; letter-spacing:-0.3px;">
                 코스 A. [가족 힐링] 삼거리공원 전통춤 & 호수 피크닉
               </p>
-              <p style="font-size: 12px; color: #475569; line-height: 1.45; margin-bottom: 12px;">
+              <p style="font-size: 12.5px; color: var(--text-body); line-height: 1.5; margin-bottom: 14px;">
                 종합운동장 혼잡 피크를 피해 삼거리공원 호수 잔디밭과 남산중앙시장 먹거리 골목을 여유롭게 즐기세요.
               </p>
               <button class="btn-primary" data-goto-tab="tab-routes">
-                <span>🧭</span> 스마트 추천 동선 상세 확인하기
+                <span>🧭</span> 스마트 추천 동선 시작하기
               </button>
             </div>
 
@@ -237,7 +260,7 @@
             <div class="data-trust-banner">
               <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
                 <span style="font-size:14px;">🛡️</span>
-                <strong style="font-size:12px; color:#0f172a;">흥타령 AI FLOW 데이터 신뢰성 원칙 (Data Trust)</strong>
+                <strong style="font-size:12.5px; color:var(--text-main);">흥타령 AI FLOW 데이터 신뢰성 원칙 (Data Trust)</strong>
               </div>
               <div>• <strong>접근 부하:</strong> 교차로 차량 통과량 기반 상대 지수 (행사장 인원수 아님)</div>
               <div>• <strong>예상 포화:</strong> 정적 주차면수·거리·시나리오 기반 지표 (실시간 잔여면 아님)</div>
@@ -271,10 +294,10 @@
               </div>
 
               <!-- 요약 칩 바 -->
-              <div style="display:flex; justify-content:space-between; font-size:11.5px; padding:8px 12px; background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; margin-bottom:10px; box-shadow:var(--shadow-xs);">
-                <span>종합운동장(서북): <strong id="map-stadium-load" style="color:#dc2626;">72</strong> pt</span>
-                <span>삼거리공원(동남): <strong id="map-samgeori-load" style="color:#059669;">38</strong> pt</span>
-                <span style="color:#d97706; font-weight:700;">셔틀: 10분 간격</span>
+              <div style="display:flex; justify-content:space-between; font-size:12px; padding:9px 14px; background:#ffffff; border:1px solid var(--border-hairline); border-radius:12px; margin-bottom:12px; box-shadow:var(--shadow-ambient);">
+                <span>종합운동장(서북): <strong id="map-stadium-load" style="color:var(--color-danger);">72</strong> pt</span>
+                <span>삼거리공원(동남): <strong id="map-samgeori-load" style="color:var(--color-success);">38</strong> pt</span>
+                <span style="color:#d97706; font-weight:800;">셔틀: 10분 간격</span>
               </div>
             </div>
 
@@ -296,45 +319,45 @@
                   <span class="legend-dot red"></span>
                   <span>혼잡(70+)</span>
                 </div>
-                <div class="legend-item" style="color:#d97706; font-weight:700;">
+                <div class="legend-item" style="color:#d97706; font-weight:800;">
                   <span>-- 셔틀</span>
                 </div>
               </div>
             </div>
 
             <!-- 주요 교차로 관측 노드 요약 목록 -->
-            <div style="margin-top: 14px;">
+            <div style="margin-top: 16px;">
               <div class="section-label-row">
                 <span class="section-title">📍 주요 8개 교차로 관측 노드 현황</span>
-                <span style="font-size:11px; color:#64748b;">클릭 시 상세 안내</span>
+                <span style="font-size:11.5px; color:var(--text-sub);">클릭 시 상세 안내</span>
               </div>
 
-              <div class="glass-card" style="padding: 12px; margin-bottom: 8px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; font-size:12.5px; font-weight:700;">
+              <div class="glass-card" style="padding: 14px; margin-bottom: 10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:800;">
                   <span>🚦 종합운동장사거리 (서북권 진입)</span>
                   <span class="card-badge live">혼잡 78</span>
                 </div>
-                <div style="font-size:11.5px; color:#64748b; margin-top:3px;">
+                <div style="font-size:12px; color:var(--text-sub); margin-top:4px;">
                   통과량 2,410대/h · 30분 뒤 88pt 예상 (번영로 우회 권장)
                 </div>
               </div>
 
-              <div class="glass-card" style="padding: 12px; margin-bottom: 8px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; font-size:12.5px; font-weight:700;">
+              <div class="glass-card" style="padding: 14px; margin-bottom: 10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:800;">
                   <span>🚦 천안삼거리 입구삼거리 (동남권)</span>
                   <span class="card-badge success">쾌적 36</span>
                 </div>
-                <div style="font-size:11.5px; color:#64748b; margin-top:3px;">
+                <div style="font-size:12px; color:var(--text-sub); margin-top:4px;">
                   통과량 1,120대/h · 임시주차장 1,000면 이상 즉시 입차 가능
                 </div>
               </div>
 
-              <div class="glass-card" style="padding: 12px; margin-bottom: 8px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; font-size:12.5px; font-weight:700;">
+              <div class="glass-card" style="padding: 14px; margin-bottom: 10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:800;">
                   <span>🚦 남부대로교차로 (동남권 연결 우회축)</span>
                   <span class="card-badge success">원활 42</span>
                 </div>
-                <div style="font-size:11.5px; color:#64748b; margin-top:3px;">
+                <div style="font-size:12px; color:var(--text-sub); margin-top:4px;">
                   통과량 1,310대/h · 종합운동장 우회하여 삼거리공원 직통 진입로
                 </div>
               </div>
@@ -349,12 +372,12 @@
             
             <div class="section-label-row">
               <span class="section-title">🧭 몰림 감지 후 제시하는 스마트 분산 동선</span>
-              <span style="font-size:11.5px; color:#059669; font-weight:800;">
+              <span style="font-size:12px; color:var(--color-success); font-weight:900;">
                 선택 시민 <span id="live-conversion-count">1,420</span>명
               </span>
             </div>
 
-            <p style="font-size:12px; color:#475569; margin-bottom:12px; line-height:1.45;">
+            <p style="font-size:12.5px; color:var(--text-body); margin-bottom:14px; line-height:1.5;">
               차량이 몰리는 종합운동장 대신, 대기 없이 문화와 미식을 즐길 수 있는 테마별 맞춤 동선을 확인하세요.
             </p>
 
@@ -374,12 +397,12 @@
             </div>
 
             <!-- 천안사랑카드 특별 혜택 배너 (단정한 오렌지 틴트) -->
-            <div class="glass-card" style="background: #fff7ed; border-color: #fed7aa; padding:14px;">
-              <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:24px;">💳</span>
+            <div class="glass-card" style="background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border-color: #fed7aa; padding:16px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:28px;">💳</span>
                 <div>
-                  <div style="font-size:13.5px; font-weight:800; color:#9a3412;">천안사랑카드 10% 추가 캐시백</div>
-                  <div style="font-size:11.5px; color:#c2410c; margin-top:2px;">흥타령 축제 기간 동남권·전통시장 가맹점 결제 시 자동 적용</div>
+                  <div style="font-size:14.5px; font-weight:900; color:#9a3412;">천안사랑카드 10% 추가 캐시백</div>
+                  <div style="font-size:12px; color:#c2410c; margin-top:3px; font-weight:600;">흥타령 축제 기간 동남권·전통시장 가맹점 결제 시 자동 적용</div>
                 </div>
               </div>
             </div>
@@ -388,34 +411,34 @@
             <div id="merchants-list-container"></div>
 
             <!-- 스탬프 투어 박스 -->
-            <div class="glass-card" style="margin-top:14px;">
+            <div class="glass-card" style="margin-top:16px;">
               <div class="card-header">
                 <div class="card-title">
                   <span>🎖️ 흥타령 분산 투어 모바일 스탬프</span>
                 </div>
                 <span class="card-badge success">2 / 3 달성</span>
               </div>
-              <p style="font-size:12px; color:#64748b; margin-bottom:12px;">
+              <p style="font-size:12.5px; color:var(--text-sub); margin-bottom:14px;">
                 삼거리공원 + 동남권 상권 방문 인증 시 천안사랑 상품권 5,000원권 자동 추첨 응모!
               </p>
-              <div style="display:flex; justify-content:space-around; padding:8px 0;">
+              <div style="display:flex; justify-content:space-around; padding:10px 0;">
                 <div style="text-align:center;">
-                  <div style="width:44px; height:44px; border-radius:50%; background:#dcfce7; border:2px solid #10b981; display:flex; align-items:center; justify-content:center; font-size:18px; margin:0 auto 4px auto;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:#dcfce7; border:2.5px solid #10b981; display:flex; align-items:center; justify-content:center; font-size:20px; margin:0 auto 5px auto; box-shadow: 0 4px 10px rgba(16,185,129,0.2);">
                     🌳
                   </div>
-                  <div style="font-size:10.5px; font-weight:700; color:#059669;">삼거리공원 ✓</div>
+                  <div style="font-size:11px; font-weight:800; color:#059669;">삼거리공원 ✓</div>
                 </div>
                 <div style="text-align:center;">
-                  <div style="width:44px; height:44px; border-radius:50%; background:#dcfce7; border:2px solid #10b981; display:flex; align-items:center; justify-content:center; font-size:18px; margin:0 auto 4px auto;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:#dcfce7; border:2.5px solid #10b981; display:flex; align-items:center; justify-content:center; font-size:20px; margin:0 auto 5px auto; box-shadow: 0 4px 10px rgba(16,185,129,0.2);">
                     🥟
                   </div>
-                  <div style="font-size:10.5px; font-weight:700; color:#059669;">남산중앙시장 ✓</div>
+                  <div style="font-size:11px; font-weight:800; color:#059669;">남산중앙시장 ✓</div>
                 </div>
                 <div style="text-align:center;">
-                  <div style="width:44px; height:44px; border-radius:50%; background:#f1f5f9; border:2px dashed #cbd5e1; display:flex; align-items:center; justify-content:center; font-size:18px; margin:0 auto 4px auto;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:#f1f5f9; border:2.5px dashed #cbd5e1; display:flex; align-items:center; justify-content:center; font-size:20px; margin:0 auto 5px auto;">
                     ☕
                   </div>
-                  <div style="font-size:10.5px; font-weight:600; color:#94a3b8;">명동거리 카페</div>
+                  <div style="font-size:11px; font-weight:700; color:#94a3b8;">명동거리 카페</div>
                 </div>
               </div>
             </div>
@@ -437,7 +460,7 @@
             </div>
 
             <!-- 4단계 의사결정 프로세스 뱃지 바 -->
-            <div style="display:flex; justify-content:space-between; background:#f1f5f9; border:1px solid #e2e8f0; border-radius:10px; padding:9px 12px; margin-bottom:14px; font-size:11px; font-weight:700;">
+            <div style="display:flex; justify-content:space-between; background:#f1f5f9; border:1px solid #e2e8f0; border-radius:12px; padding:10px 14px; margin-bottom:16px; font-size:11.5px; font-weight:800;">
               <span style="color:#d97706;">01 관측 ❯</span>
               <span style="color:#0284c7;">02 비교 ❯</span>
               <span style="color:#4f46e5;">03 검토 ❯</span>
@@ -445,40 +468,40 @@
             </div>
 
             <!-- 핵심 모니터링 메트릭 카드 -->
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
-              <div class="glass-card" style="padding:12px; margin-bottom:0;">
-                <div style="font-size:11px; color:#64748b; margin-bottom:2px;">권역별 부하 격차</div>
-                <div style="font-size:22px; font-weight:900; color:#dc2626;" id="op-venue-gap">34 pt</div>
-                <div style="font-size:10.5px; color:#94a3b8; margin-top:2px;">서북권 극심 편중 상태</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+              <div class="glass-card" style="padding:14px; margin-bottom:0;">
+                <div style="font-size:11.5px; color:var(--text-sub); margin-bottom:3px; font-weight:700;">권역별 부하 격차</div>
+                <div style="font-size:26px; font-weight:900; color:var(--color-danger); font-family:var(--font-display);" id="op-venue-gap">34 pt</div>
+                <div style="font-size:11px; color:#94a3b8; margin-top:2px; font-weight:600;">서북권 극심 편중 상태</div>
               </div>
 
-              <div class="glass-card" style="padding:12px; margin-bottom:0;">
-                <div style="font-size:11px; color:#64748b; margin-bottom:2px;">예측 모델 WAPE 오차</div>
-                <div style="font-size:22px; font-weight:900; color:#059669;" id="op-model-wape">9.29%</div>
-                <div style="font-size:10.5px; color:#059669; font-weight:600; margin-top:2px;">기준선 대비 <span id="op-model-improve">+52.67%</span> 개선</div>
+              <div class="glass-card" style="padding:14px; margin-bottom:0;">
+                <div style="font-size:11.5px; color:var(--text-sub); margin-bottom:3px; font-weight:700;">예측 모델 WAPE 오차</div>
+                <div style="font-size:26px; font-weight:900; color:var(--color-success); font-family:var(--font-display);" id="op-model-wape">9.29%</div>
+                <div style="font-size:11px; color:var(--color-success); font-weight:800; margin-top:2px;">기준선 대비 <span id="op-model-improve">+52.67%</span> 개선</div>
               </div>
             </div>
 
-            <div class="glass-card" style="padding:12px; margin-bottom:14px;">
+            <div class="glass-card" style="padding:14px 16px; margin-bottom:16px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:12.5px; font-weight:700; color:#0f172a;">
+                <span style="font-size:13px; font-weight:800; color:var(--text-main);">
                   현재 현장 부하 완화율 (정책 시뮬레이션 성과)
                 </span>
-                <span style="font-size:16px; font-weight:900; color:#4f46e5;" id="op-mitigation-rate">18.4%</span>
+                <span style="font-size:18px; font-weight:900; color:var(--brand-indigo); font-family:var(--font-display);" id="op-mitigation-rate">18.4%</span>
               </div>
             </div>
 
             <div class="section-label-row">
               <span class="section-title">⚡ AI 분산 권고 시나리오 검토 & 채널 발송</span>
-              <span style="font-size:11px; color:#64748b;">실시간 현장 반영</span>
+              <span style="font-size:11.5px; color:var(--text-sub);">실시간 현장 반영</span>
             </div>
 
             <!-- 시나리오 목록 렌더링 컨테이너 -->
             <div id="operator-scenarios-container"></div>
 
             <!-- 데이터 파이프라인 리포트 요약 -->
-            <div class="glass-card" style="margin-top:14px; font-size:11.5px; color:#64748b; line-height:1.55;">
-              <div style="font-weight:800; color:#0f172a; margin-bottom:4px; font-size:12px;">
+            <div class="glass-card" style="margin-top:16px; font-size:12px; color:var(--text-sub); line-height:1.6;">
+              <div style="font-weight:900; color:var(--text-main); margin-bottom:5px; font-size:13px;">
                 📑 데이터 분석 파이프라인 명세 (기획서 07-09p 준수)
               </div>
               <div>• <strong>수집 데이터:</strong> 2025.09 천안시 교통량 174,960행, 공식 프로그램 102건, 부스 81건</div>
@@ -490,7 +513,7 @@
 
         </main>
 
-        <!-- 하단 네비게이션 바 -->
+        <!-- 프리미엄 플로팅 독 (하단 네비게이션) -->
         <nav class="bottom-nav">
           <button class="nav-item active" data-tab="tab-home">
             <span class="nav-icon">🏠</span>
@@ -526,25 +549,25 @@
           <div class="bottom-sheet" style="max-height:85%;">
             <div class="bottom-sheet-handle"></div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-              <h3 style="font-size:15px; font-weight:800; color:#0f172a;">📅 천안흥타령춤축제 2026 주요 일정</h3>
-              <button id="close-timetable-btn" style="background:none; border:none; color:#64748b; font-size:22px; cursor:pointer;">&times;</button>
+              <h3 style="font-size:16px; font-weight:900; color:var(--text-main);">📅 천안흥타령춤축제 2026 주요 일정</h3>
+              <button id="close-timetable-btn" style="background:none; border:none; color:var(--text-sub); font-size:24px; cursor:pointer;">&times;</button>
             </div>
 
-            <div style="display:flex; flex-direction:column; gap:10px; font-size:12px;">
-              <div style="background:#fff5f5; border:1px solid #fecaca; border-radius:10px; padding:12px;">
-                <div style="color:#dc2626; font-weight:800;">🏟️ 천안종합운동장 (서북권)</div>
-                <div style="color:#0f172a; font-weight:700; margin-top:4px;">14:30 - 16:30 | 전국대학 무용경연대회 결선</div>
-                <div style="color:#64748b; margin-top:2px;">흥타령극장 (접근 부하 급증 예상)</div>
-                <div style="color:#0f172a; font-weight:700; margin-top:8px;">18:30 - 21:00 | 거리댄스 퍼레이드 본선</div>
-                <div style="color:#64748b; margin-top:2px;">종합운동장 광장 특설무대</div>
+            <div style="display:flex; flex-direction:column; gap:12px; font-size:12.5px;">
+              <div style="background:#fff5f5; border:1px solid #fecaca; border-radius:14px; padding:14px;">
+                <div style="color:var(--color-danger); font-weight:900;">🏟️ 천안종합운동장 (서북권 메인 거점)</div>
+                <div style="color:var(--text-main); font-weight:800; margin-top:5px;">14:30 - 16:30 | 전국대학 무용경연대회 결선</div>
+                <div style="color:var(--text-sub); margin-top:2px;">흥타령극장 (접근 부하 급증 예상)</div>
+                <div style="color:var(--text-main); font-weight:800; margin-top:10px;">18:30 - 21:00 | 거리댄스 퍼레이드 본선</div>
+                <div style="color:var(--text-sub); margin-top:2px;">종합운동장 광장 특설무대</div>
               </div>
 
-              <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:12px;">
-                <div style="color:#059669; font-weight:800;">🌳 천안삼거리공원 (동남권 분산 거점)</div>
-                <div style="color:#0f172a; font-weight:700; margin-top:4px;">14:30 - 16:00 | 명인명무 전통춤 한마당 & 마당극</div>
-                <div style="color:#64748b; margin-top:2px;">삼거리전통극장 (대기 없이 여유로운 관람 가능)</div>
-                <div style="color:#0f172a; font-weight:700; margin-top:8px;">16:30 - 19:30 | 능소호수 가족 피크닉 버스킹</div>
-                <div style="color:#64748b; margin-top:2px;">능소호수 잔디광장 (드론 라이팅 쇼 연계)</div>
+              <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:14px; padding:14px;">
+                <div style="color:var(--color-success); font-weight:900;">🌳 천안삼거리공원 (동남권 분산 거점)</div>
+                <div style="color:var(--text-main); font-weight:800; margin-top:5px;">14:30 - 16:00 | 명인명무 전통춤 한마당 & 마당극</div>
+                <div style="color:var(--text-sub); margin-top:2px;">삼거리전통극장 (대기 없이 여유로운 관람 가능)</div>
+                <div style="color:var(--text-main); font-weight:800; margin-top:10px;">16:30 - 19:30 | 능소호수 가족 피크닉 버스킹</div>
+                <div style="color:var(--text-sub); margin-top:2px;">능소호수 잔디광장 (드론 라이팅 쇼 연계)</div>
               </div>
             </div>
           </div>
