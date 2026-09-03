@@ -366,16 +366,50 @@ const FESTIVAL_DATA = {
   }
 };
 
-// 실시간 내비게이션 딥링크 유틸리티
+// 실시간 내비게이션 딥링크 유틸리티 (출발지: 현재 내 위치 자동 연동)
 const NavigationUtils = {
-  getKakaoMapUrl(lat, lng, name) {
-    const encodedName = encodeURIComponent(name);
-    return `https://map.kakao.com/link/to/${encodedName},${lat},${lng}`;
+  getCurrentUserPos() {
+    if (window.flowMap && window.flowMap.userLocation) {
+      return window.flowMap.userLocation;
+    }
+    return { lat: 36.8090, lng: 127.1475, name: "천안역 (내 위치)" };
   },
 
-  getNaverMapUrl(lat, lng, name) {
-    const encodedName = encodeURIComponent(name);
-    return `https://map.naver.com/v5/directions/-/-/-/transit?c=${lng},${lat},15,0,0,0,dh&destination=${encodedName},${lng},${lat}`;
+  // 카카오맵 길찾기 URL: 출발지(현재 내 위치) ➔ 목적지 자동 세팅
+  getKakaoMapUrl(destLat, destLng, destName, customStart = null) {
+    const start = customStart || this.getCurrentUserPos();
+    const startName = start.name || "내 현재 위치";
+    const encStart = encodeURIComponent(startName);
+    const encDest = encodeURIComponent(destName);
+
+    // 출발지와 도착지가 모두 채워져 자동 탐색되는 카카오맵 URL
+    return `https://map.kakao.com/?sName=${encStart}&eName=${encDest}&sp=${start.lat},${start.lng}&ep=${destLat},${destLng}`;
+  },
+
+  // 카카오 내비게이션 모바일 앱/웹 자동 분기
+  openKakaoNavi(destLat, destLng, destName, customStart = null) {
+    const start = customStart || this.getCurrentUserPos();
+    const webUrl = this.getKakaoMapUrl(destLat, destLng, destName, start);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // 카카오맵 앱 딥링크
+      const appUrl = `kakaomap://route?sp=${start.lat},${start.lng}&ep=${destLat},${destLng}&by=CAR`;
+      window.location.href = appUrl;
+      setTimeout(() => {
+        window.open(webUrl, "_blank");
+      }, 1200);
+    } else {
+      window.open(webUrl, "_blank");
+    }
+  },
+
+  // 네이버 지도 출발지 ➔ 도착지 연동 URL
+  getNaverMapUrl(destLat, destLng, destName, customStart = null) {
+    const start = customStart || this.getCurrentUserPos();
+    const encodedDest = encodeURIComponent(destName);
+    const encodedStart = encodeURIComponent(start.name || "내 위치");
+    return `https://map.naver.com/v5/directions/${start.lng},${start.lat},${encodedStart}/${destLng},${destLat},${encodedDest}/-/car`;
   },
 
   getDistanceKm(lat1, lon1, lat2, lon2) {

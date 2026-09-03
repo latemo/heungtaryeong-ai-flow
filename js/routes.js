@@ -322,7 +322,11 @@ class RoutesController {
 
     const currentStep = route.steps[this.currentNavStep];
     const isLastStep = this.currentNavStep === route.steps.length - 1;
-    const kakaoUrl = window.NavigationUtils.getKakaoMapUrl(currentStep.lat, currentStep.lng, currentStep.place);
+
+    const prevStep = this.currentNavStep > 0 ? route.steps[this.currentNavStep - 1] : null;
+    const startPos = prevStep ? { lat: prevStep.lat, lng: prevStep.lng, name: prevStep.place } : window.NavigationUtils.getCurrentUserPos();
+    const kakaoUrl = window.NavigationUtils.getKakaoMapUrl(currentStep.lat, currentStep.lng, currentStep.place, startPos);
+    const startLabel = prevStep ? prevStep.place : startPos.name;
 
     modalContent.innerHTML = `
       <div class="bottom-sheet-handle"></div>
@@ -333,7 +337,7 @@ class RoutesController {
 
       <h2 style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">${route.title}</h2>
       <p style="font-size:12px; color:#475569; margin-bottom:14px;">
-        예측 기반 최적 분산 경로를 실시간으로 안내하고 있습니다.
+        출발지 <strong>[${startLabel}]</strong> 기준 실시간 카카오 내비게이션을 지원합니다.
       </p>
 
       <!-- 현재 경유지 카드 -->
@@ -352,7 +356,7 @@ class RoutesController {
             권장 방문 시각: ${currentStep.time}
           </div>
           <a href="${kakaoUrl}" target="_blank" style="background:#fee500; color:#191919; font-size:11.5px; font-weight:800; padding:6px 12px; border-radius:8px; text-decoration:none; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-            카카오 길안내 ➔
+            💛 카카오 길안내 시작 ➔
           </a>
         </div>
       </div>

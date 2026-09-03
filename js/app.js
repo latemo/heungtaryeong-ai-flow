@@ -223,6 +223,19 @@ function bindGlobalControls() {
       timetableModal.classList.remove("active");
     });
   }
+
+  // 홈 화면 GPS 카드 카카오 길안내 (출발지: 현재 내 위치 자동 세팅)
+  document.querySelectorAll(".gps-navi-trigger-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const target = e.currentTarget.dataset.target;
+      const { venues } = window.FESTIVAL_DATA;
+      const venue = target === "stadium" ? venues.stadium : venues.samgeori;
+      const startPos = window.NavigationUtils.getCurrentUserPos();
+
+      showToast(`🧭 [${startPos.name}] 출발 ➔ [${venue.name}] 카카오 길안내 연결`);
+      window.NavigationUtils.openKakaoNavi(venue.lat, venue.lng, venue.name, startPos);
+    });
+  });
 }
 
 // 4. 전역 토스트 알림 헬퍼
