@@ -358,11 +358,11 @@ class RoutesController {
         </div>
 
         <div style="display:flex; gap:8px;">
-          <a href="${naverUrl}" target="_blank" style="flex:1; text-align:center; background:#03c75a; color:#ffffff; font-size:11.5px; font-weight:800; padding:8px 0; border-radius:8px; text-decoration:none; box-shadow:0 2px 6px rgba(3,199,90,0.25);">
-            🟢 네이버 빠른길찾기 (자동출발)
+          <a href="${naverUrl}" target="_blank" style="flex:1; text-align:center; background:#03c75a; color:#ffffff; font-size:12px; font-weight:800; padding:9px 0; border-radius:8px; text-decoration:none; box-shadow:0 2px 6px rgba(3,199,90,0.25); display:flex; align-items:center; justify-content:center; gap:4px;">
+            <span>🟢</span> 네이버 길찾기
           </a>
-          <a href="${kakaoUrl}" target="_blank" style="flex:1; text-align:center; background:#fee500; color:#191919; font-size:11.5px; font-weight:800; padding:8px 0; border-radius:8px; text-decoration:none; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-            💛 카카오맵 길찾기
+          <a href="${kakaoUrl}" target="_blank" style="flex:1; text-align:center; background:#fee500; color:#191919; font-size:12px; font-weight:800; padding:9px 0; border-radius:8px; text-decoration:none; box-shadow:0 2px 6px rgba(0,0,0,0.1); display:flex; align-items:center; justify-content:center; gap:4px;">
+            <span>💛</span> 카카오 길찾기
           </a>
         </div>
       </div>
