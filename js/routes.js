@@ -325,7 +325,8 @@ class RoutesController {
 
     const prevStep = this.currentNavStep > 0 ? route.steps[this.currentNavStep - 1] : null;
     const startPos = prevStep ? { lat: prevStep.lat, lng: prevStep.lng, name: prevStep.place } : window.NavigationUtils.getCurrentUserPos();
-    const kakaoUrl = window.NavigationUtils.getKakaoMapUrl(currentStep.lat, currentStep.lng, currentStep.place, startPos);
+    const kakaoUrl = window.NavigationUtils.getKakaoMapUrl(currentStep.lat, currentStep.lng, currentStep.place);
+    const naverUrl = window.NavigationUtils.getNaverMapUrl(currentStep.lat, currentStep.lng, currentStep.place, startPos);
     const startLabel = prevStep ? prevStep.place : startPos.name;
 
     modalContent.innerHTML = `
@@ -337,7 +338,7 @@ class RoutesController {
 
       <h2 style="font-size:16px; font-weight:900; color:#0f172a; margin-bottom:4px;">${route.title}</h2>
       <p style="font-size:12px; color:#475569; margin-bottom:14px;">
-        출발지 <strong>[${startLabel}]</strong> 기준 실시간 카카오 내비게이션을 지원합니다.
+        출발지 <strong>[${startLabel}]</strong> ➔ 도착지 <strong>[${currentStep.place}]</strong> 자동 길찾기
       </p>
 
       <!-- 현재 경유지 카드 -->
@@ -348,15 +349,20 @@ class RoutesController {
         <div style="font-size:17px; font-weight:900; color:#0f172a; margin-bottom:4px;">
           📍 ${currentStep.place}
         </div>
-        <div style="font-size:13px; color:#334155; margin-bottom:10px; line-height:1.45;">
+        <div style="font-size:13px; color:#334155; margin-bottom:12px; line-height:1.45;">
           ${currentStep.desc}
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div style="font-size:11.5px; color:#059669; font-weight:800;">
-            권장 방문 시각: ${currentStep.time}
-          </div>
-          <a href="${kakaoUrl}" target="_blank" style="background:#fee500; color:#191919; font-size:11.5px; font-weight:800; padding:6px 12px; border-radius:8px; text-decoration:none; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-            💛 카카오 길안내 시작 ➔
+        
+        <div style="font-size:11.5px; color:#059669; font-weight:800; margin-bottom:10px;">
+          권장 방문 시각: ${currentStep.time}
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <a href="${naverUrl}" target="_blank" style="flex:1; text-align:center; background:#03c75a; color:#ffffff; font-size:11.5px; font-weight:800; padding:8px 0; border-radius:8px; text-decoration:none; box-shadow:0 2px 6px rgba(3,199,90,0.25);">
+            🟢 네이버 빠른길찾기 (자동출발)
+          </a>
+          <a href="${kakaoUrl}" target="_blank" style="flex:1; text-align:center; background:#fee500; color:#191919; font-size:11.5px; font-weight:800; padding:8px 0; border-radius:8px; text-decoration:none; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+            💛 카카오맵 길찾기
           </a>
         </div>
       </div>

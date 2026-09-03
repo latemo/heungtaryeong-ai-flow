@@ -224,16 +224,22 @@ function bindGlobalControls() {
     });
   }
 
-  // 홈 화면 GPS 카드 카카오 길안내 (출발지: 현재 내 위치 자동 세팅)
+  // 홈 화면 GPS 카드 길안내 (네이버 100% 자동출발 & 카카오맵)
   document.querySelectorAll(".gps-navi-trigger-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       const target = e.currentTarget.dataset.target;
+      const provider = e.currentTarget.dataset.provider;
       const { venues } = window.FESTIVAL_DATA;
       const venue = target === "stadium" ? venues.stadium : venues.samgeori;
       const startPos = window.NavigationUtils.getCurrentUserPos();
 
-      showToast(`🧭 [${startPos.name}] 출발 ➔ [${venue.name}] 카카오 길안내 연결`);
-      window.NavigationUtils.openKakaoNavi(venue.lat, venue.lng, venue.name, startPos);
+      if (provider === "naver") {
+        showToast(`🧭 [${startPos.name}] ➔ [${venue.name}] 네이버 빠른 길찾기 연결`);
+        window.open(window.NavigationUtils.getNaverMapUrl(venue.lat, venue.lng, venue.name, startPos), "_blank");
+      } else {
+        showToast(`🧭 [${venue.name}] 카카오맵 길찾기 연결`);
+        window.open(window.NavigationUtils.getKakaoMapUrl(venue.lat, venue.lng, venue.name), "_blank");
+      }
     });
   });
 }

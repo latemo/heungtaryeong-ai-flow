@@ -372,44 +372,40 @@ const NavigationUtils = {
     if (window.flowMap && window.flowMap.userLocation) {
       return window.flowMap.userLocation;
     }
-    return { lat: 36.8090, lng: 127.1475, name: "천안역 (내 위치)" };
+    return { lat: 36.8090, lng: 127.1475, name: "천안역" };
   },
 
-  // 카카오맵 길찾기 URL: 출발지(현재 내 위치) ➔ 목적지 자동 세팅
-  getKakaoMapUrl(destLat, destLng, destName, customStart = null) {
-    const start = customStart || this.getCurrentUserPos();
-    const startName = start.name || "내 현재 위치";
-    const encStart = encodeURIComponent(startName);
+  // 카카오맵 길찾기 URL: 카카오 공식 link/to 포맷 (도착지 명칭 & 좌표 정확히 파싱)
+  getKakaoMapUrl(destLat, destLng, destName) {
     const encDest = encodeURIComponent(destName);
+    return `https://map.kakao.com/link/to/${encDest},${destLat},${destLng}`;
+  },
 
-    // 출발지와 도착지가 모두 채워져 자동 탐색되는 카카오맵 URL
-    return `https://map.kakao.com/?sName=${encStart}&eName=${encDest}&sp=${start.lat},${start.lng}&ep=${destLat},${destLng}`;
+  // 네이버 지도 길찾기 URL: 출발지(내 현재 위치) ➔ 도착지 둘 다 100% 자동 완성 및 경로 계산
+  getNaverMapUrl(destLat, destLng, destName, customStart = null) {
+    const start = customStart || this.getCurrentUserPos();
+    const encodedDest = encodeURIComponent(destName);
+    const encodedStart = encodeURIComponent(start.name || "내 현재 위치");
+    return `https://map.naver.com/v5/directions/${start.lng},${start.lat},${encodedStart}/${destLng},${destLat},${encodedDest}/-/car`;
   },
 
   // 카카오 내비게이션 모바일 앱/웹 자동 분기
   openKakaoNavi(destLat, destLng, destName, customStart = null) {
     const start = customStart || this.getCurrentUserPos();
-    const webUrl = this.getKakaoMapUrl(destLat, destLng, destName, start);
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // 카카오맵 앱 딥링크
+      // 스마트폰에서는 카카오맵 앱 스킴으로 출발지와 도착지를 모두 전달하여 자동 길찾기
       const appUrl = `kakaomap://route?sp=${start.lat},${start.lng}&ep=${destLat},${destLng}&by=CAR`;
       window.location.href = appUrl;
       setTimeout(() => {
-        window.open(webUrl, "_blank");
+        window.open(this.getKakaoMapUrl(destLat, destLng, destName), "_blank");
       }, 1200);
     } else {
-      window.open(webUrl, "_blank");
+      // PC 웹 브라우저에서는 네이버 지도로 열면 출발지와 도착지가 100% 자동 완성되어 경로가 즉시 표시됨
+      // 사용자 편의를 위해 카카오 공식 link/to를 열거나 네이버 자동완성을 지원
+      window.open(this.getNaverMapUrl(destLat, destLng, destName, start), "_blank");
     }
-  },
-
-  // 네이버 지도 출발지 ➔ 도착지 연동 URL
-  getNaverMapUrl(destLat, destLng, destName, customStart = null) {
-    const start = customStart || this.getCurrentUserPos();
-    const encodedDest = encodeURIComponent(destName);
-    const encodedStart = encodeURIComponent(start.name || "내 위치");
-    return `https://map.naver.com/v5/directions/${start.lng},${start.lat},${encodedStart}/${destLng},${destLat},${encodedDest}/-/car`;
   },
 
   getDistanceKm(lat1, lon1, lat2, lon2) {
